@@ -53,4 +53,35 @@ align-items: center;
 }
 
 
+
+
+
+
+
+
+@media (max-width: 767px){
+
+
+  .pagesnation {
+    margin-top: 40px;
+    display: flex;
+    /* justify-content: unset; */
+  }
+  .page {
+    margin-top: 0px;
+    margin-left: 23px;
+    margin-right: 0px;
+  }
+  .no_pages span {
+    font-family: "Jost";
+    font-size: 14px;
+    margin: -4px;
+    padding: 11px;
+  }
+  .no_pages {
+    margin: 0px 28px;
+  }
+
+}
+
 </style>

@@ -2,22 +2,26 @@
     <div>
         <div class="container">
     <div id="proheading">
-      <p>Women Pashmina Shawls</p>
-      <span>810 Item</span>
+      <p>{{productName}}</p>
+      <span>{{productCount}} Items</span>
     </div>
     </div>
     </div>
 </template>
 <script>
 export default{
-    name:'Proheading'
+    name:'Proheading',
+    props: {
+      productCount: String,
+      productName: String
+    }
 }
 
 
 </script>
 <style>
 #proheading {
-  margin-top: 36px;
+     margin-top: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -35,6 +39,10 @@ export default{
 }
 
 
-
+@media (max-width: 767px){
+   #proheading p {
+    font-size: 28px;
+  }
+}
 
 </style>

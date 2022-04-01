@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="filters">
-      <div class="left_filter">
+      <div class="left_filter"  >
         <h3><svg xmlns="http://www.w3.org/2000/svg" width="18.467" height="11.654" viewBox="0 0 18.467 11.654">
             <g transform="translate(-1149.5 42.429)">
               <rect width="8.992" height="1.869" transform="translate(1149.5 -40.656)" />
@@ -45,7 +45,11 @@
 </template>
 <script>
 export default{
-    name: 'Filter'
+    name: 'Filter',
+    props:{
+      productFilter:Array,
+    }
+
 }
 
 
@@ -155,6 +159,37 @@ div button {
 .filter_type_list_display{
   display: block;
 }
+@media (max-width: 767px){
+   .filters {
+    display: flex;
+    padding: 0;
+    width: 100%;
+       z-index: 1;
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+    justify-content: space-evenly;
+  }
 
+  .left_filter {
+    border: 1px solid #000000ab;
+  }
+  .left_filter a {
+    padding: 0px 21px;
+    text-decoration: none;
+    color: black;
+    font-size: 11px;
+    font-weight: bold;
+  }
+  .left_filter a svg {
+    width: 15px;
+  }
+  .left_filter img {
+    margin-left: 3px;
+  }
+  #shrot_by {
+    margin: 0px 14px;
+  }
+}
 
 </style>

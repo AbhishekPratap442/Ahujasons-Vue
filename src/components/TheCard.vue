@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
     <div>
         <div>
             <img :src="item.image" />
@@ -62,4 +62,4 @@ export default {
 
 
 
-</script>
+</script> -->

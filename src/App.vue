@@ -2,9 +2,9 @@
 <template>
 <Navbar />
 <Main_header/>
-<Proheading/>
-<Filter/>
-<Products/>
+<Proheading :productCount="productCount" :productName="productName" />
+<Filter  :productFilter="productFilter"/>
+<Products :list="list"  :productFilter="productFilter" :topWearKurtas="topWearKurtas"/>
 <Pages/>
 <Border/>
 <Footer/>
@@ -21,7 +21,7 @@ import Products from "./components/Products.vue"
 import Pages from "./components/Pages.vue"
 import Border from "./components/Border.vue"
 import Footer from "./components/Footer.vue"
-
+import axios from "axios"
 
 
 export default{
@@ -37,19 +37,51 @@ components:{
   Footer
 
 },
-mounted() {
-  console.log("Mounted rendered")
-},
+data() {
+        return {
+           list:[],
+          //  listName:"",
+            productInfo: [],
+            productFilter: [],
+            productCount:"",
+            productName:"",
+            topWearKurtas:""
+        }
 
 
+    },
 
+ methods: {
+
+        async apiCall() {
+            let data = await axios.get('https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=')
+              console.log("Api1",data.data)
+              this.productCount = data.data.result.count;
+                 this.productName = data.data.result.name;
+                 this.productFilter = data.data.result.filters;
+                  this.list = data.data.result.products;   
+                  this.topWearKurtas = data.data.result.url_key;   
+                //   this.listName = data.data.result.products.name;   
+
+            // console.log("eee", this.list);
+            // for(let i=0; i < this.list.length; i++){
+            //     console.log(this.list[i].image)
+        }
+        //           .then( data => {
+        //   console.log(data)
+        //   this.list = data.data.result.products
+        //   console.log("list ", this.list)
+        //   }, 
+        //   );
+
+    },
+    mounted() {
+
+        this.apiCall()
+          console.log("API DATA")
+    }
 
 }
-
-
-
-
-
 
 
 </script>
@@ -149,6 +181,9 @@ body {
     background-color: white;
     position: sticky;
     top: 0;
+  }
+  .navMenu{
+    display: block;
   }
   .mid {
     margin: 0px;

@@ -265,6 +265,85 @@ export default{
 .copyrights {
   margin-top: 17px;
 }
+@media (max-width: 767px){
+  .footer {
+    display: inline;
+  }
+  .footer_links p {
+    margin-top: 10px;
+  }
+  .footer_links h3 span {
+    display: inline-block;
+    float: right;
+  }
+  .footer_link_heading {
+    display: flex;
+  }
+  .follow_email {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .links {
+    margin-top: 16px;
+    margin-left: 8px;
+  }
+  .copyrights {
+    margin-top: 4px;
+  }
+  #newsleatter {
+    padding: 7px 0px;
+    font-size: 15px;
+  }
+  .footer_links {
+    margin: auto;
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+   
+}
+  .footer_links h3 {
+    border-bottom: 1px solid black;
+    display: inline;
+  }
 
+  .sign_up{
+    margin: 17px;
+  }
+  .sign_up h3{
+       margin: 0;
+       font-size: 17px;
+      font-weight: bold;
+  
+  }
+  .email {
+    width: 97%;
+    margin: 0px auto;
+}
+.email input{
+  border: none;
+  padding-right: 45px;
+}
+  .quick_links_para {
+    display: none;
+  }
+  .para {
+    display: none;
+  }
+  .customer_services_para {
+    display: none;
+  }
+  .my_profile_para {
+    display: none;
+  }
+  .side_filter{
+    display: none;
+  }
+  .display {
+    display: block;
+  }
+
+}
 
 </style>

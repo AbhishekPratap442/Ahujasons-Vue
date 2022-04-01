@@ -198,10 +198,10 @@ export default {
     display: none;
 }
 .main_header {
-    font-size: 16px;
+        font-size: 16px;
     color: #303030;
-    margin-top: 10px;
-    padding: 12px 0px;
+    /* margin-top: 10px; */
+    padding: 8px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -272,5 +272,86 @@ svg {
     width: 21px;
     margin: 0px 17px;
     cursor: pointer;
+}
+@media (max-width: 767px) {
+  .header {
+          justify-content: center;
+       }
+  .main_header {
+    z-index: 1;
+    background-color: white;
+    position: sticky;
+    top: 0;
+  }
+  .navMenu{
+    display: block;
+  }
+  .mid {
+    margin: 0px;
+}
+  
+  .gray_div {
+    width: 21%;
+    height: 100vh;
+    background-color: #05040445;
+  }
+  .nav_links {
+    z-index: 1;
+    /* justify-content: center; */
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    top: 14vh;
+    background-color: #272727d1;
+    transform: translateX(-100vw);
+    transition: all 0.5s ease-in-out;
+    width: 100%;
+    top: 0;
+    left: 0;
+  }
+  .active {
+    transform: translateX(0vw);
+  }
+
+  .nav_links ul {
+    margin: 24px;
+  }
+  .nav_links ul li {
+    margin: 16px 28px;
+    padding: 13px 5px;
+    margin-left: 0;
+    color: white
+  }
+  .nav_links ul li a {
+    color: white;
+    text-decoration: none;
+  }
+  .nav_links ul li a img {
+    width: 23px;
+  }
+
+  .remove_nav_links {
+    width: 100%;
+    height: 222px;
+    color: #4c0b36;
+  }
+  .navMenu {
+    display: block;
+
+    width: 31px;
+  }
+  
+  .right1{
+      display: none;
+  }
+  svg {
+    margin: 0px 8px;
+  }
+  .mid img {
+    width: 64px;
+    position: relative;
+    top: 3px;
+    left: 38px;
+  }
 }
 </style>
