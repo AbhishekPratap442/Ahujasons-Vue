@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="filters">
-      <div class="left_filter"  >
+      <div class="left_filter"  @click=" toggleSide" >
         <h3><svg xmlns="http://www.w3.org/2000/svg" width="18.467" height="11.654" viewBox="0 0 18.467 11.654">
             <g transform="translate(-1149.5 42.429)">
               <rect width="8.992" height="1.869" transform="translate(1149.5 -40.656)" />
@@ -25,30 +25,47 @@
             </g>
           </svg>HIDE FILTER</a>
       </div>
-      <div class="right_filter">
-        <select name="shrot_by" id="shrot_by">
-          <option value="short">SHORT BY</option>
-        </select>
-        <div class="shrot_by_choice">
-                <ul>
-                  <li><a href="#"> Price: Low to High</a></li>
-                  <li><a href="#"> Price: High to Low</a></li>
-                  <li><a href="#"> Discount</a></li>
-                  <li><a href="#"> Popularity</a></li>
-                  <li><a href="#"> Newest</a></li>
-                </ul>
 
-        </div>
+
+
+      <div class="right_filter">
+          
+        <select name="shrot_by" id="shrot_by" > 
+          <option value="short"  @change="filter" >SORT BY</option>
+          <option value="short" v-for="sort in productsSort" :key="sort.id" >{{sort.label}}</option>  
+        </select>
+      
     </div>
   </div>
     </div>
 </template>
 <script>
+// import { toggleSide } from "./status"
+// const filters = [
+// "Category",
+// "Plus Size"
+
+// ]
+
+
 export default{
     name: 'Filter',
     props:{
       productFilter:Array,
-    }
+       productsSort:Array,
+    },
+
+    methods: {
+      sorting(event){
+        console.log("event is click");
+       
+       },
+       filter(){
+         console.log(this.filterSelected);
+  
+       }
+      }
+    
 
 }
 

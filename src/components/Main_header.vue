@@ -3,9 +3,7 @@
         <div class="main_header">
             <!-- ---------------Nav bar for media queri------------------ -->
             <div class="navMenu">
-                <svg
-                    class="navMenu"
-                    xmlns="http://www.w3.org/2000/svg"
+                <svg  class="navMenu" xmlns="http://www.w3.org/2000/svg"
                     height="24px"
                     viewBox="0 0 24 24"
                     width="24px"
@@ -16,9 +14,10 @@
                 </svg>
             </div>
 
-            <div class="nav_links">
-                <div class="login">
-                    <svg
+
+    <div class="nav_links" v-if="show">
+        <div class="login">
+            <svg
                         class="close_nav"
                         xmlns="http://www.w3.org/2000/svg"
                         height="24px"
@@ -65,6 +64,7 @@
                 </div>
                 <div class="gray_div">asd</div>
             </div>
+       
 
             <div class="left1">
                 <ul>
@@ -186,7 +186,7 @@
 <script>
 export default {
 
-    name: 'Main_header'
+    name: 'Main_header',
 
 
 }
@@ -194,6 +194,16 @@ export default {
 </script>
 
 <style scoped>
+
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s ;
+  transform: translateX(0vw);
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateX(-100vw);
+}
 .navMenu {
     display: none;
 }

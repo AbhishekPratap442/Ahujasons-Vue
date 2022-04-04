@@ -3,8 +3,8 @@
 <Navbar />
 <Main_header/>
 <Proheading :productCount="productCount" :productName="productName" />
-<Filter  :productFilter="productFilter"/>
-<Products :list="list"  :productFilter="productFilter" :topWearKurtas="topWearKurtas"/>
+<Filter  :productFilter="productFilter"   :productsSort="productsSort"/>
+<Products :list="list"  :productFilter="productFilter" :topWearKurtas="topWearKurtas" :producttype="producttype"/>
 <Pages/>
 <Border/>
 <Footer/>
@@ -43,6 +43,8 @@ data() {
           //  listName:"",
             productInfo: [],
             productFilter: [],
+            productsSort:[],
+            producttype:[],
             productCount:"",
             productName:"",
             topWearKurtas:""
@@ -59,8 +61,10 @@ data() {
               this.productCount = data.data.result.count;
                  this.productName = data.data.result.name;
                  this.productFilter = data.data.result.filters;
+                 this.producttype= data.data.result.filters.options;
                   this.list = data.data.result.products;   
                   this.topWearKurtas = data.data.result.url_key;   
+                  this.productsSort = data.data.result.sort;   
                 //   this.listName = data.data.result.products.name;   
 
             // console.log("eee", this.list);
