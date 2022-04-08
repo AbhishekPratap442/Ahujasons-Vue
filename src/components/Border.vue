@@ -24,16 +24,16 @@ name:'Border'
 
 <style scoped>
 #border {
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+        margin-top: 62px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 .right_border {
-  width: 536px;
-  height: 6px;
-  border-top: 1px solid #eae4cf;
-  border-bottom: 1px solid #eae4cf;
+    width: 550px;
+    height: 6px;
+    border-top: 1px solid #eae4cf;
+    border-bottom: 1px solid #eae4cf;
 }
 
 .mid_border {
@@ -43,10 +43,10 @@ name:'Border'
   width: 72px;
 }
 .left_border {
-  width: 536px;
-  height: 6px;
-  border-top: 1px solid #eae4cf;
-  border-bottom: 1px solid #eae4cf;
+ width: 550px;
+    height: 6px;
+    border-top: 1px solid #eae4cf;
+    border-bottom: 1px solid #eae4cf;
 }
 
 

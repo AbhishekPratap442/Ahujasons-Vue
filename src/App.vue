@@ -1,93 +1,95 @@
-
 <template>
-<Navbar />
-<Main_header/>
-<Proheading :productCount="productCount" :productName="productName" />
-<Filter  :productFilter="productFilter"   :productsSort="productsSort"/>
-<Products :list="list"  :productFilter="productFilter" :topWearKurtas="topWearKurtas" :producttype="producttype"/>
-<Pages/>
-<Border/>
-<Footer/>
+  <Navbar />
+  <Main_header />
+  <Proheading :productCount="productCount" :productName="productName" />
+  <ProductPage
+    :list="list"
+    :productFilter="productFilter"
+    :productType="productType"
+    :productsSort="productsSort"
+  />
+  <Pages />
+  <Border />
+  <Footer />
+
+
 
 
 
 </template>
 <script>
-import Main_header from "./components/Main_header.vue"
-import Navbar from "./components/Navbar.vue"
-import Proheading from "./components/Proheading.vue"
-import Filter from "./components/Filter.vue"
-import Products from "./components/Products.vue"
-import Pages from "./components/Pages.vue"
-import Border from "./components/Border.vue"
-import Footer from "./components/Footer.vue"
-import axios from "axios"
+import Main_header from "./components/Main_header.vue";
+import Navbar from "./components/Navbar.vue";
+import Proheading from "./components/Proheading.vue";
 
+import Pages from "./components/Pages.vue";
+import Border from "./components/Border.vue";
+import Footer from "./components/Footer.vue";
+import axios from "axios";
+import ProductPage from "./components/ProductPage.vue";
 
-export default{
-name:'App',
-components:{
-  Navbar,
-  Main_header,
-  Proheading,
-  Filter,
-  Products,
-  Pages,
-  Border,
-  Footer
+export default {
+  name: "App",
+  components: {
+    Navbar,
+    Main_header,
+    Proheading,
+    ProductPage,
+    Pages,
+    Border,
+    Footer,
+  },
+  data() {
+    return {
+      list: [],
+      //  listName:"",
+      productInfo: [],
+      productFilter: [],
+      // productsSort: [],
+      productType: [],
+      productCount: "",
+      productName: "",
+    };
+  },
 
-},
-data() {
-        return {
-           list:[],
-          //  listName:"",
-            productInfo: [],
-            productFilter: [],
-            productsSort:[],
-            producttype:[],
-            productCount:"",
-            productName:"",
-            topWearKurtas:""
-        }
+  methods: {
+    async apiCall() {
+      let data = await axios.get(
+        "https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=",
+      //    {
+      //     // params: {
+      //     //   filter: "color-Green",
+      //     //   price:"selling_price-Rs.0+to+Rs.2000",
+      //     //   discount:"discount"
 
+      //     // }
+      // }
+      );
+      console.log("Api1", data.data);
+      this.productCount = data.data.result.count;
+      this.productName = data.data.result.name;
+      this.productFilter = data.data.result.filters;
+      this.productType = data.data.result.filters[0].options[0];
+      this.list = data.data.result.products;
 
+      //   this.listName = data.data.result.products.name;
+
+      // console.log("eee", this.list);
+      // for(let i=0; i < this.list.length; i++){
+      //     console.log(this.list[i].image)
     },
+    //           .then( data => {
+    //   console.log(data)
+    //   this.list = data.data.result.products
+    //   console.log("list ", this.list)
+    //   },
+    //   );
+  },
+  mounted() {
+    this.apiCall();
 
- methods: {
-
-        async apiCall() {
-            let data = await axios.get('https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=')
-              console.log("Api1",data.data)
-              this.productCount = data.data.result.count;
-                 this.productName = data.data.result.name;
-                 this.productFilter = data.data.result.filters;
-                 this.producttype= data.data.result.filters.options;
-                  this.list = data.data.result.products;   
-                  this.topWearKurtas = data.data.result.url_key;   
-                  this.productsSort = data.data.result.sort;   
-                //   this.listName = data.data.result.products.name;   
-
-            // console.log("eee", this.list);
-            // for(let i=0; i < this.list.length; i++){
-            //     console.log(this.list[i].image)
-        }
-        //           .then( data => {
-        //   console.log(data)
-        //   this.list = data.data.result.products
-        //   console.log("list ", this.list)
-        //   }, 
-        //   );
-
-    },
-    mounted() {
-
-        this.apiCall()
-          console.log("API DATA")
-    }
-
-}
-
-
+  },
+};
 </script>
 <style>
 @font-face {
@@ -154,8 +156,6 @@ body {
 }
 /* --------------Media Queri------------------------- */
 
-
-
 .hamburder_menu {
   display: none;
 }
@@ -178,21 +178,21 @@ body {
 
 @media (max-width: 767px) {
   .header {
-          justify-content: center;
-       }
+    justify-content: center;
+  }
   .main_header {
     z-index: 1;
     background-color: white;
     position: sticky;
     top: 0;
   }
-  .navMenu{
+  .navMenu {
     display: block;
   }
   .mid {
     margin: 0px;
-}
-  
+  }
+
   .gray_div {
     width: 21%;
     height: 100vh;
@@ -223,7 +223,7 @@ body {
     margin: 16px 28px;
     padding: 13px 5px;
     margin-left: 0;
-    color: white
+    color: white;
   }
   .nav_links ul li a {
     color: white;
@@ -243,8 +243,7 @@ body {
 
     width: 31px;
   }
-  
-  
+
   svg {
     margin: 0px 8px;
   }
@@ -268,7 +267,8 @@ body {
     position: relative;
     display: inline-block;
     margin: auto;
-    }
+  }
+
   .products_img {
     padding: 0;
     display: flex;
@@ -280,6 +280,7 @@ body {
     margin: 2px;
     max-width: 100%;
   }
+
   .products {
     flex: 0 0 45%;
   }
@@ -288,13 +289,15 @@ body {
   }
   .products svg {
     position: absolute;
-  
   }
+    .api_products_img {
+    width: 49%;
+}
   .filters {
     display: flex;
-    padding: 0;
+    padding: 0px;
     width: 100%;
-       z-index: 1;
+    z-index: 222;
     position: fixed;
     bottom: 0;
     background-color: white;
@@ -421,10 +424,7 @@ body {
     flex-direction: column;
     align-items: center;
   }
-  .links {
-    margin-top: 16px;
-    margin-left: 8px;
-  }
+ 
   .copyrights {
     margin-top: 4px;
   }
@@ -437,30 +437,28 @@ body {
     width: 100%;
     display: flex;
     align-items: stretch;
-   
-}
+  }
   .footer_links h3 {
     border-bottom: 1px solid black;
     display: inline;
   }
 
-  .sign_up{
+  .sign_up {
     margin: 17px;
   }
-  .sign_up h3{
-       margin: 0;
-       font-size: 17px;
-      font-weight: bold;
-  
+  .sign_up h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: bold;
   }
   .email {
     width: 97%;
     margin: 0px auto;
-}
-.email input{
-  border: none;
-  padding-right: 45px;
-}
+  }
+  .email input {
+    border: none;
+    padding-right: 45px;
+  }
   .quick_links_para {
     display: none;
   }
@@ -473,12 +471,21 @@ body {
   .my_profile_para {
     display: none;
   }
-  .side_filter{
-    display: none;
+  .side_filter {
+    position: absolute;
+
+    width: 45%;
+   
+    position: absolute;
+    background: white;
+    border: 1px solid;
+    top: 16px;
+    z-index: 1;
+    left: 7px;
+    padding: 0px;
   }
   .display {
     display: block;
   }
 }
-
 </style>

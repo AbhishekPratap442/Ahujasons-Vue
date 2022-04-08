@@ -7,15 +7,15 @@
     </div>
 
     <div class="footer_links" id="shop">
-      <h3>
+      <h3 v-on:click="shop = !shop">
         SHOP
         <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
           </svg></span>
       </h3>
-
-      <div class="para">
+<!-- v-if="shop" -->
+      <div class="para"   :class="{active : shop}" >
         <p>Men</p>
         <p>Women</p>
         <p>Home</p>
@@ -24,8 +24,8 @@
       </div>
     </div>
 
-    <div class="footer_links">
-      <h3 id="quick_links">
+    <div class="footer_links" >
+      <h3 id="quick_links" v-on:click="quick_links = !quick_links">
         QUICK LINKS
         <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
@@ -33,7 +33,7 @@
           </svg></span>
       </h3>
       <div class="footer_links">
-        <div class="quick_links_para">
+        <div class="quick_links_para"  :class="{active : quick_links}">
           <p>Ahujasons Expore</p>
           <p>Ahujasons Wholesale</p>
           <p>Our Story</p>
@@ -46,14 +46,14 @@
     </div>
 
     <div class="footer_links" id="customer_services">
-      <h3 id="customer_services">
+      <h3 id="customer_services"  v-on:click="customer_services = !customer_services">
         CUSTOMER SERVICE
         <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
           </svg></span>
       </h3>
-      <div class="customer_services_para">
+      <div class="customer_services_para" :class="{active : customer_services}">
         <p>Terms and Condition</p>
         <p>Shipping & Delivery</p>
         <p>Returns & Cancellation</p>
@@ -63,14 +63,14 @@
     </div>
 
     <div class="footer_links">
-      <h3 id="my_profile">
+      <h3 id="my_profile" v-on:click="my_profile = !my_profile">
         MY PROFILE
         <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
           </svg></span>
       </h3>
-      <div class="my_profile_para">
+      <div class="my_profile_para" :class="{active : my_profile}">
         <p>My Account</p>
         <p>Track Order</p>
         <p>My Cart</p>
@@ -187,7 +187,28 @@
 
 <script>
 export default{
-    name:'Footer'
+    name:'Footer',
+    data(){
+      console.log("event fire") 
+        return{
+            shop:false,
+            quick_links:false,
+            customer_services:false,
+            my_profile:false,
+          }
+        },
+
+
+        methods: {
+          isMobile(){
+            if(innerWidth== 760){
+                  this.shop
+            }
+          }
+        },
+
+
+
 }
 
 </script>
@@ -228,6 +249,7 @@ export default{
   width: 94%;
 }
 .email input{
+  width: 76%;
   border:none
 }
 
@@ -261,6 +283,10 @@ export default{
 .fb {
   width: 55px;
 }
+.links svg{
+  margin: 10px;
+}
+
 
 .copyrights {
   margin-top: 17px;
@@ -285,12 +311,12 @@ export default{
     flex-direction: column;
     align-items: center;
   }
-  .links {
-    margin-top: 16px;
-    margin-left: 8px;
-  }
+  .follow {
+        margin: 16px 6px;
+}
   .copyrights {
     margin-top: 4px;
+        margin-left: 9px;
   }
   #newsleatter {
     padding: 7px 0px;
@@ -322,23 +348,31 @@ export default{
     margin: 0px auto;
 }
 .email input{
+  width: 73%;
   border: none;
-  padding-right: 45px;
+ 
 }
+.para {
+    display: block;
+  }
+
   .quick_links_para {
-    display: none;
+    display: none ;
   }
   .para {
     display: none;
   }
+  .active{
+    display: block !important;
+  }
   .customer_services_para {
-    display: none;
+    display: none  !important;
   }
   .my_profile_para {
-    display: none;
+    display: none  !important;
   }
   .side_filter{
-    display: none;
+    display: none  !important;
   }
   .display {
     display: block;

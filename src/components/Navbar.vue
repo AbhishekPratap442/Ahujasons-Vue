@@ -6,20 +6,22 @@
     </div>
     <div class="right">
       <ul>
-        <li id="flags">
+        <li id="flags" v-on:click="filterSeen = !filterSeen">
           <span><img src="../assets/1200px-Flag_of_India.svg.webp" /></span>
           <p>IND <img src="../assets/Path 115.png" alt="" /></p>
-          <div class="flag">
+        </li>
+          <div class="flag" v-if="filterSeen" >
             <div>
-              <span><img src="./img/1200px-Flag_of_the_United_States.svg.webp" /></span>
+              <div class="flag_name">
+              <span><img src="../assets/1200px-Flag_of_the_United_States.svg.webp" /></span>
               <p>USA</p>
-              <div>
-                <span><img src="./img/1200px-Flag_of_the_United_Kingdom.svg.webp" /></span>
+              </div>
+              <div class="flag_name">
+                <span><img src="../assets/1200px-Flag_of_the_United_Kingdom.svg.webp" /></span>
                 <p>UK</p>
               </div>
             </div>
           </div>
-        </li>
         <li><a href="#">OUR STORES</a></li>
         <li><a href="#">MY ACCOUNT</a></li>
         <li><a href="#">BLOG</a></li>
@@ -32,7 +34,11 @@
 
 export default{
     name:'Navbar',
- 
+ data(){
+   return{
+      filterSeen:false
+   }
+ }
 }
 
 </script>
@@ -52,8 +58,18 @@ export default{
 }
 
 .flag {
-  display: none;
+  /* display: none; */
   position: absolute;
+      position: absolute;
+    z-index: 1111;
+    top: 23px;
+    right: 22.2vw;
+}
+.flag div span img{
+  width: 24px;
+}
+.flag_name{
+  display: flex;
 }
 .show {
   display: none;
@@ -103,6 +119,16 @@ li {
   margin: 3px -7px -2px 0px;
 }
 
+
+@media (max-width: 767px){
+.header{
+  justify-content: space-around;
+}
+
+
+
+
+}
 
 
 

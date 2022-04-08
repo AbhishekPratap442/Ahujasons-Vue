@@ -30,11 +30,19 @@ name:'Pages'
 
 
 <style scoped>
+
+.page{
+      left: 3vw;
+    position: absolute;
+}
+.no_pages{
+      position: absolute;
+    left: 40vw;
+}
 .pagesnation {
-  margin-top: 25px;
-  display: flex;
-  justify-content: space-evenly;
-align-items: center;  
+      margin: 35px 0px;
+    display: flex;
+    position: relative;
 }
 
 .no_pages span {
@@ -52,35 +60,28 @@ align-items: center;
   background-color: #4c0b36;
 }
 
-
-
-
-
-
-
-
 @media (max-width: 767px){
-
-
-  .pagesnation {
-    margin-top: 40px;
-    display: flex;
-    /* justify-content: unset; */
-  }
   .page {
     margin-top: 0px;
-    margin-left: 23px;
+    margin-left: 2px;
     margin-right: 0px;
-  }
-  .no_pages span {
+}
+.no_pages {
+    margin: 0px 1px
+
+}
+.no_pages span {
     font-family: "Jost";
     font-size: 14px;
-    margin: -4px;
-    padding: 11px;
-  }
-  .no_pages {
-    margin: 0px 28px;
-  }
+    margin: 2px;
+    padding: 8px;
+}
+
+
+
+
+
+
 
 }
 
