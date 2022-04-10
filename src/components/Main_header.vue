@@ -1,6 +1,7 @@
 <template>
   <div class="main_header">
     <!-- ---------------Nav bar for media queri------------------ -->
+    <!-- hamburger menu--------------------- -->
     <div class="navMenu">
       <svg
         v-on:click="shop = !shop"
@@ -15,7 +16,7 @@
         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
       </svg>
     </div>
-
+  <!-- --------------------close Menu---------------------- -->
     <div class="nav_links"  :class="shop ? 'active' : ''">
       <div class="login">
         <svg
@@ -201,36 +202,12 @@
 <script>
 export default  {
   name: "Main_header",
+
   data(){
         return {
             shop:false
         }
   },
-//   methods: {
-//     navmenu() {
-//       const navMenu = document.querySelector(".navMenu");
-//       // const close_nav = document.querySelector(".close_nav");
-//       const nav_links = document.querySelector(".nav_links");
-//       navMenu.addEventListener("click", () => {
-//         nav_links.classList.toggle("active");
-//       });
-
-//       dropdown.addEventListener("click", () => {
-//         para.classList.toggle("display");
-//       });
-//     },
-//     // close_nav() {
-//     //   const gray_div = document.querySelector(".gray_div");
-//     //   const nav_links = document.querySelector(".nav_links");
-//     //   const close_nav = document.querySelector(".close_nav");
-//     //   close_nav.addEventListener("click", () => {
-//     //     nav_links.classList.toggle("active");
-//     //     gray_div.addEventListener("click", () => {
-//     //       nav_links.classList.toggle("active");
-//         });
-//       });
-//     },
-//   },
 };
 </script>
 

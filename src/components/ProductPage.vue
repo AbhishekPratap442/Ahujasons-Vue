@@ -1,5 +1,4 @@
 <template>
-  
   <div>
     <div class="filters">
       <div class="left_filter" v-on:click="filterSeen = !filterSeen">
@@ -53,9 +52,10 @@
         <select
           name="shrot_by"
           id="shrot_by"
-          @click="sorting()"
-          v-model="params"
+          @change="sortingdatabyprice"
+          v-model="shrot_by"
         >
+          <option selected >SORT BY</option>
           <option
             :value="sort.code"
             v-for="sort in productsSort"
@@ -63,10 +63,10 @@
           >
             {{ sort.label }}
           </option>
-          <option value="short" selected>SORT BY</option>
-          <option value="short" selected>Price(Low to High)</option>
+          <!-- <option value="short" selected>SORT BY</option>
+          <option value="short" selected  > Price(Low to High)</option>
           <option value="short" selected>Price(High to Low)</option>
-          <option value="short" selected>Discount</option>
+          <option value="short" selected>Discount</option> -->
         </select>
       </div>
     </div>
@@ -78,6 +78,7 @@
             class="filter_type"
             v-for="filters in productFilter"
             :key="filters.id"
+            
           >
             <div
               v-on:click="filters.isVisible = !filters.isVisible"
@@ -98,16 +99,16 @@
               </span>
             </div>
             <div>
-              <div class="filter_type_sub_option" v-show="filters.isVisible">
-                <ul v-for="option in filters.options" :key="option.value_key">
-                 
-         <label  class="checkbox" >
-             <input type="checkbox" checked 
-                    :value="option.code + '-' + option.value"
-                    v-model="filterParamsTwo" />
+              <div class="filter_type_sub_option" v-show="filters.isVisible"  >
+                <ul v-for="option in filters.options" :key="option.value_key" >
+                  <label class="checkbox" >
+                    <input type="checkbox" name="checkbox" @change="sortingdatabyfilter" v-model="filter_lable"  />
+                      <!-- :value="option.code + '-' + option.value" -->
                     <span class="checkmark"></span>
-                      <span  class="label">  {{ option.value }} ({{ option.total }})</span>
-              </label>
+                    <span class="label"  >
+                      {{ option.value }} ({{ option.total }})</span
+                    >
+                  </label>
                 </ul>
               </div>
             </div>
@@ -137,13 +138,11 @@
 
 export default {
   name: "ProductsPage",
-  // data:{
-  //     seen: true
-  // },
+  data: {
+    seen: true,
+  },
   data() {
     return {
-      params: "",
-      filterParams: "",
       filterParamsTwo: [],
       seen: true,
       toggle: true,
@@ -151,51 +150,35 @@ export default {
       filterSeen: false,
       showfilter: true,
       isVisible: false,
-      productsSort: [],
+      shrot_by: "",
+      filter_lable:""
     };
   },
   methods: {
-    //    async secondApi() {
-    //        let data = await axios.get(
-    //      "https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=",
-    // {
-    //     //   params: {
-    //     //     discount:"discount",
-    //     //     filter: "color-Green",
-
-    //     //   }
-    //   }
-
-    //   )
-    //        console.log ( "api call 2" + data.data)
-    //              this.productsSort = data.data.result.sort.value;
-    //              console.log ( "api call 2" + this.productsSort)
-    //   },
+      sortingdatabyfilter(){
+          this.$emit("sorting-data-by-filter", this.filter_lable )
+          console.log("this is from side filter", this.filter_lable);
+      },
+    sortingdatabyprice() {
+      this.$emit("sorting-data-by-price", this.shrot_by);
+    },
 
     toggleDetails() {
       this.detailsAreVisible = !this.detailsAreVisible;
     },
-
-    sorting() {},
   },
+
   props: {
     list: Array,
     productFilter: Array,
-    productType: Array,
-    // productsSort:Array
+    productsSort: Array,
   },
-
-  // mounted() {
-  //    await axios.get(
-  //      "https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=", )
-
+  //   mounted() {
+  //       console.log("Product Sort", this.productsSort)
   //   },
 };
 </script>
 <style scoped>
-
-    
-  
 .hide {
   display: none;
 }
@@ -228,23 +211,23 @@ body {
   border: 1px solid;
 }
 .right_filter select {
-      border: none;
-    padding: 12px 15px;
-    cursor: pointer;
-    width: 226px;
-    height: 41px;
-    font-weight: 100;
-    font-size: 13px;
-    font-family: "Jost";
+  border: none;
+  padding: 12px 15px;
+  cursor: pointer;
+  width: 226px;
+  height: 41px;
+  font-weight: 100;
+  font-size: 13px;
+  font-family: "Jost";
 }
 
 .right_filter select option {
   padding: 12px 12px;
 }
-/* Customize the label (the container) */.check-box-group {
+/* Customize the label (the container) */
+.check-box-group {
   display: flex;
   flex-direction: column;
-  
 }
 
 .checkbox {
@@ -260,18 +243,18 @@ body {
 }
 
 .checkbox .checkmark {
-    width: 12px;
-    height: 12px;
-    border: 1px solid;
-    display: inline-block;
-    border-radius: 0px;
-    background: #4c0b36 url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png) center/1250% no-repeat;
-    
+  width: 12px;
+  height: 12px;
+  border: 1px solid;
+  display: inline-block;
+  border-radius: 0px;
+  background: #4c0b36
+    url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png)
+    center/1250% no-repeat;
 }
 
 .checkbox input:checked + .checkmark {
   background-size: 60%;
-  
 }
 
 .checkbox input {
@@ -280,11 +263,9 @@ body {
 
 /* -------------------------------------Products -------------------- */
 .products_img {
- 
-    display: flex;
-    padding: 26px;
-    box-shadow: 0px 5px 0px -4px #e4e4e4;
-
+  display: flex;
+  padding: 26px;
+  box-shadow: 0px 5px 0px -4px #e4e4e4;
 }
 .side_filter {
   padding-right: 22px;

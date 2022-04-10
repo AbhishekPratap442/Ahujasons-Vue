@@ -5,17 +5,13 @@
   <ProductPage
     :list="list"
     :productFilter="productFilter"
-    :productType="productType"
     :productsSort="productsSort"
+    @sorting-data-by-price="sortingdatabyprice"
+    @sorting-data-by-filter="sortingdatabyfilter"
   />
   <Pages />
   <Border />
   <Footer />
-
-
-
-
-
 </template>
 <script>
 import Main_header from "./components/Main_header.vue";
@@ -42,52 +38,66 @@ export default {
   data() {
     return {
       list: [],
-      //  listName:"",
       productInfo: [],
       productFilter: [],
-      // productsSort: [],
-      productType: [],
+      productsSort: [],
       productCount: "",
       productName: "",
+      checkparam: "",
+      checkfilter: "",
+      // filter_lable:""
+      // value_key:""
     };
   },
 
   methods: {
-    async apiCall() {
+    async wforwomendata() {
+      console.log("apiCall called");
       let data = await axios.get(
-        "https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=",
-      //    {
-      //     // params: {
-      //     //   filter: "color-Green",
-      //     //   price:"selling_price-Rs.0+to+Rs.2000",
-      //     //   discount:"discount"
-
-      //     // }
-      // }
+        ` https://pim.wforwoman.com/pim/pimresponse.php/`,
+        {
+          params: {
+            service: "category",
+            store: 1,
+            url_key: "top-wear-sets-dresses",
+            page: 1,
+            count: 20,
+            sort_by: this.checkparam,
+            sort_dir: "desc",
+            filter: "",
+          },
+        }
       );
+            console.log( "this is a filter " , this.checkfilter );
       console.log("Api1", data.data);
       this.productCount = data.data.result.count;
       this.productName = data.data.result.name;
       this.productFilter = data.data.result.filters;
-      this.productType = data.data.result.filters[0].options[0];
       this.list = data.data.result.products;
-
-      //   this.listName = data.data.result.products.name;
-
-      // console.log("eee", this.list);
-      // for(let i=0; i < this.list.length; i++){
-      //     console.log(this.list[i].image)
+      this.productsSort = data.data.result.sort;
     },
-    //           .then( data => {
-    //   console.log(data)
-    //   this.list = data.data.result.products
-    //   console.log("list ", this.list)
-    //   },
-    //   );
-  },
-  mounted() {
-    this.apiCall();
+    sortingdatabyfilter(checkfilter) {
+      this.checkparam = checkfilter;
+      if(this.checkparam== this.productFilter){
+              this.checkfilter
+      }
+      console.log("this is a side filter", this.checkfilter);
+      this.wforwomendata();
+    },
 
+
+
+    sortingdatabyprice(checking) {
+      this.checkparam = checking;
+      console.log("this is a event 1", this.checkparam);
+      this.wforwomendata();
+      //  this.lowtohigh=desc
+      // this.productsSort
+    },
+  },
+
+  mounted() {
+    this.wforwomendata();
   },
 };
 </script>
@@ -290,9 +300,9 @@ body {
   .products svg {
     position: absolute;
   }
-    .api_products_img {
+  .api_products_img {
     width: 49%;
-}
+  }
   .filters {
     display: flex;
     padding: 0px;
@@ -424,7 +434,7 @@ body {
     flex-direction: column;
     align-items: center;
   }
- 
+
   .copyrights {
     margin-top: 4px;
   }
@@ -475,7 +485,7 @@ body {
     position: absolute;
 
     width: 45%;
-   
+
     position: absolute;
     background: white;
     border: 1px solid;
