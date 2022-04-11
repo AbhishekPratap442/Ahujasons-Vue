@@ -42,9 +42,9 @@
               />
             </g>
           </svg>
-          <span @click="toggleDetails">
-            {{ detailsAreVisible ? "HIDE FILTER" : "SHOW FILTER" }}
-          </span>
+          <span @click="toggleDetails">{{
+            detailsAreVisible ? "HIDE FILTER" : "SHOW FILTER"
+          }}</span>
         </h3>
       </div>
 
@@ -55,7 +55,7 @@
           @change="sortingdatabyprice"
           v-model="shrot_by"
         >
-          <option selected >SORT BY</option>
+          <option selected>SORT BY</option>
           <option
             :value="sort.code"
             v-for="sort in productsSort"
@@ -66,7 +66,7 @@
           <!-- <option value="short" selected>SORT BY</option>
           <option value="short" selected  > Price(Low to High)</option>
           <option value="short" selected>Price(High to Low)</option>
-          <option value="short" selected>Discount</option> -->
+                    <option value="short" selected>Discount</option>-->
         </select>
       </div>
     </div>
@@ -78,7 +78,6 @@
             class="filter_type"
             v-for="filters in productFilter"
             :key="filters.id"
-            
           >
             <div
               v-on:click="filters.isVisible = !filters.isVisible"
@@ -99,15 +98,21 @@
               </span>
             </div>
             <div>
-              <div class="filter_type_sub_option" v-show="filters.isVisible"  >
-                <ul v-for="option in filters.options" :key="option.value_key" >
-                  <label class="checkbox" >
-                    <input type="checkbox" name="checkbox" @change="sortingdatabyfilter" v-model="filter_lable"  />
-                      <!-- :value="option.code + '-' + option.value" -->
-                    <span class="checkmark"></span>
-                    <span class="label"  >
-                      {{ option.value }} ({{ option.total }})</span
-                    >
+              <div class="filter_type_sub_option" v-show="filters.isVisible">
+                <ul v-for="option in filters.options" :key="option.value_key">
+                  <label class="checkbox" >  
+                  <input type="checkbox"  :value="option.code + '-' + option.value"  @click="sortingdatabyfilter" :id="option.value" :checked="option.checked"/>
+                    <!-- <input
+                      type="checkbox"
+                      name="checkbox"
+                      id="checkbox"
+                      :value="option.code + '-' + option.value"
+                      v-model="name"
+                    /> -->
+                    <!-- @click="applyfiltercheck" -->
+                    <!-- <span class="checkmark"></span> -->
+                    <span class="label"> {{ option.value }} ({{ option.total }})</span>
+                   
                   </label>
                 </ul>
               </div>
@@ -134,8 +139,7 @@
 </template>
 
 <script>
-// import axios from "axios";
-
+import axios from "axios";
 export default {
   name: "ProductsPage",
   data: {
@@ -143,7 +147,6 @@ export default {
   },
   data() {
     return {
-      filterParamsTwo: [],
       seen: true,
       toggle: true,
       detailsAreVisible: false,
@@ -151,16 +154,63 @@ export default {
       showfilter: true,
       isVisible: false,
       shrot_by: "",
-      filter_lable:""
+      name: "",
+      //  payloadData:{
+      //     page: 1,
+      //     count: 20,
+      //     sort_by:"",
+      //     filter:"",
+      //     sort_dir:"",
+      //     filter:""
+      // }
     };
   },
   methods: {
-      sortingdatabyfilter(){
-          this.$emit("sorting-data-by-filter", this.filter_lable )
-          console.log("this is from side filter", this.filter_lable);
-      },
+
+       async wforwomendata() {
+      console.log("apiCall called");
+      let data = await axios.get(
+        ` https://pim.wforwoman.com/pim/pimresponse.php/`,
+        {
+          params: {
+            service: "category",
+            store: 1,
+            url_key: "top-wear-sets-dresses",
+            page: 1,
+            count: 20,
+            sort_by: this.checkparam,
+            sort_dir: "desc",
+            filter: "",
+          },
+        }
+      );
+     console.log( "this is a filter " , this.checkfilter );
+      console.log("Api1", data.data);
+  
+   
+    },
+
+
+
+
+
+
+
+
+
+
+    sortingdatabyfilter() {
+      this.$emit("sorting-data-by-filter", this.name);
+      console.log("this is from side filter", this.wforwomendata());
+      this. wforwomendata()
+      
+    },
+
+    //
+
     sortingdatabyprice() {
       this.$emit("sorting-data-by-price", this.shrot_by);
+      console.log("this is sort filter", this.shrot_by);
     },
 
     toggleDetails() {
@@ -173,9 +223,6 @@ export default {
     productFilter: Array,
     productsSort: Array,
   },
-  //   mounted() {
-  //       console.log("Product Sort", this.productsSort)
-  //   },
 };
 </script>
 <style scoped>
@@ -258,7 +305,7 @@ body {
 }
 
 .checkbox input {
-  display: none;
+  /* display: none; */
 }
 
 /* -------------------------------------Products -------------------- */

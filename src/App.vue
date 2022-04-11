@@ -44,7 +44,14 @@ export default {
       productCount: "",
       productName: "",
       checkparam: "",
-      checkfilter: "",
+      checkfilter: ""
+        // payloadData:{
+        //     page: 1,
+        //     count: 20,
+        //     sort_by:"",
+        //     filter:"",
+        //     sort_dir:""
+        // }
       // filter_lable:""
       // value_key:""
     };
@@ -76,14 +83,32 @@ export default {
       this.list = data.data.result.products;
       this.productsSort = data.data.result.sort;
     },
-    sortingdatabyfilter(checkfilter) {
-      this.checkparam = checkfilter;
-      if(this.checkparam== this.productFilter){
-              this.checkfilter
-      }
-      console.log("this is a side filter", this.checkfilter);
-      this.wforwomendata();
-    },
+
+
+
+
+
+//   sortingdatabyfilter(sidefiltercheck) {
+
+// this.checkfilter=sidefiltercheck
+// console.log("this is api fro app" , this.checkfilter);
+//  this.wforwomendata();
+//   },
+
+
+      
+  //   );
+
+
+
+
+      // console.log(checkfilter);
+      // this.checkfilter = checkfilter;
+      // if(this.checkparam== this.productFilter){
+      //         this.checkfilter
+      // }
+    // 
+    
 
 
 
@@ -95,6 +120,7 @@ export default {
       // this.productsSort
     },
   },
+
 
   mounted() {
     this.wforwomendata();
