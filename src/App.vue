@@ -4,10 +4,10 @@
   <Proheading :productCount="productCount" :productName="productName" />
   <ProductPage
     :list="list"
-    :productFilter="productFilter"
+   
     :productsSort="productsSort"
     @sorting-data-by-price="sortingdatabyprice"
-    @sorting-data-by-filter="sortingdatabyfilter"
+  
   />
   <Pages />
   <Border />
@@ -79,7 +79,7 @@ export default {
       console.log("Api1", data.data);
       this.productCount = data.data.result.count;
       this.productName = data.data.result.name;
-      this.productFilter = data.data.result.filters;
+     
       this.list = data.data.result.products;
       this.productsSort = data.data.result.sort;
     },
