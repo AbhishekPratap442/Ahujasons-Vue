@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="filters">
-      <div class="left_filter" v-on:click="filterSeen = !filterSeen" @click="getfilteroptions">
+      <div
+        class="left_filter"
+        v-on:click="filterSeen = !filterSeen"
+        @click="getfilteroptions"
+      >
         <h3 v-on:click="showfilter = !showfilter">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -52,7 +56,7 @@
         <select
           name="shrot_by"
           id="shrot_by"
-          @change="sortingdatabyprice"
+          @change="sortingdatabyprice()"
           v-model="shrot_by"
         >
           <option selected>SORT BY</option>
@@ -63,10 +67,6 @@
           >
             {{ sort.label }}
           </option>
-          <!-- <option value="short" selected>SORT BY</option>
-          <option value="short" selected  > Price(Low to High)</option>
-          <option value="short" selected>Price(High to Low)</option>
-                    <option value="short" selected>Discount</option>-->
         </select>
       </div>
     </div>
@@ -98,26 +98,25 @@
               </span>
             </div>
             <div class="btn">
-                <button @click="applyfilter" >Apply Filter</button>
+              <!-- <button @click="applyfilter">Apply Filter</button> -->
             </div>
             <div>
-              <div class="filter_type_sub_option" v-show="filters.isVisible">
+              <div class="filter_type_sub_option" v-if="filters.isVisible">
                 <ul v-for="option in filters.options" :key="option.value_key">
-                  <label class="checkbox" >  
-                  <input type="checkbox"  :value="option.code + '-' + option.value"  @click="sortingdatabyfilter($event, option.value_key)" :id="option.value_key" :checked="option.checked" v-model="value_key"/>
-                    <!-- <input
+                  <label class="checkbox" for="check1">
+                    <input
                       type="checkbox"
-                      name="checkbox"
-                      id="checkbox"
-                      :value="option.code + '-' + option.value"
-                      v-model="name"
-                    /> -->
-                    <!-- @click="applyfiltercheck" -->
-                    <!-- <span class="checkmark"></span> -->
-                    <span class="label"> {{ option.value }} ({{ option.total }})</span>
-                   
+                      name="check1"
+                      @click="
+                        sortingdatabyfilter($event, option.value, option.code)
+                      "
+                      :id="option.value_key"
+                    />
+                    <span class="checkmark"></span>
+                    <span class="label">
+                      {{ option.value }} ({{ option.total }})</span
+                    >
                   </label>
-                  
                 </ul>
               </div>
             </div>
@@ -151,29 +150,24 @@ export default {
   },
   data() {
     return {
+      list: [],
       productFilter: [],
-      productFilterCetegory:[],
+      productFilterCetegory: [],
+      productsSort: [],
       seen: true,
       toggle: true,
       detailsAreVisible: false,
       filterSeen: false,
-      showfilter: true,
+      showfilter: false,
       isVisible: false,
       shrot_by: "",
-      value_key: "",
-    //    payloadData:{
-    //       page: 1,
-    //       count: 20,
-    //       sort_by:"",
-    //       filter:"",
-    //       sort_dir:"",
-    //       filter:""
-    //   }
+      value: "",
+      filtersoptions: "",
+      checkparam: "",
     };
   },
   methods: {
-  async wforwomendata() {
-      console.log("apiCall called");
+    async wforwomendata() {
       let data = await axios.get(
         `  https://pim.wforwoman.com/pim/pimresponse.php`,
         {
@@ -183,77 +177,73 @@ export default {
             url_key: "top-wear-sets-dresses",
             page: 1,
             count: 20,
-            sort_by: this.checkparam,
+            sort_by: this.shrot_by,
             sort_dir: "desc",
-            filter: this.value_key
-            ,
+            filter: this.filtersoptions,
           },
         }
       );
-             
-             console.log("Api1", data.data);
-             this.productFilter = data.data.result.filters;
-             console.log("Api11111111111", this.productFilter)
+      this.productFilter = data.data.result.filters;
+      console.log("this is product list", this.list);
+      this.list = data.data.result.products;
+      this.productsSort = data.data.result.sort;
     },
 
+    sortingdatabyfilter(event, value, code) {
+      console.log("event=", event, "value=", value, "code=", code);
+      // this.filtersoptions.push(code + "-" + value);
+      this.filtersoptions = `${code}-${value}`;
+      this.wforwomendata();
 
-    sortingdatabyfilter(event, value_key) {
-        console.log(value_key);
-           if(event.target.checked){
-                this.productFilterCetegory.push(event.target.id);
-
-           }else{
-               const id = event.target.id;
-               for(let data of this.productFilterCetegory){
-                   if(data === id){
-                       const index = this.productFilterCetegory.indexOf(data);
-                       console.log(index)
-                       this.productFilterCetegory.splice(index, 1);
-                   }
-               }
-           }
-
-
-
-
-
-
-
-    //   this.$emit("sorting-data-by-filter", this.name);
-    //   console.log("this is from side filter", this.wforwomendata());
-      this. wforwomendata(this.productFilterCetegory)
-      
-    },
-
-
-    applyfilter(){
-        const pars = this.productFilterCetegory.map((str)=>{
-            return (str);
+      if (event.target.checked) {
+        const coma = "";
+        if (this.filtersoptions !== "") {
+          coma = " ,";
         }
-        
-    );
-    const data ={
-        productFilterCetegory:pars
-    }
-            console.log(data);
-  },
+        this.filtersoptions = `${this.filtersoptions}${coma}${code}-${value}`;
+        this.wforwomendata();
+      } else {
+        this.filtersoptions = this.filtersoptions.replaceAll(
+          code + "-" + value,
+          ""
+        );
 
-    
-    getfilteroptions(){
-         this.wforwomendata()
+        const id = event.target.id;
+        for (let data of this.filtersoptions) {
+          if (data === id) {
+            const index = this.filtersoptions.indexOf(data);
+            //  console.log(index)
+            this.filtersoptions.splice(index, 1);
+          }
+        }
+      }
+      console.log(this.productFilterCetegory);
+      this.wforwomendata(this.productFilterCetegory);
+      console.log(this.productFilterCetegory);
+    },
+    applyfilter() {
+      const pars = this.productFilterCetegory.map((str) => {
+        return str;
+      });
+      const data = {
+        productFilterCetegory: pars,
+      };
+      console.log(data);
     },
 
+    getfilteroptions() {
+      this.wforwomendata();
+    },
 
-
-
-
-
-
-
-
-    sortingdatabyprice() {
-      this.$emit("sorting-data-by-price", this.shrot_by);
+    sortingdatabyprice(shrot_by) {
+      // this.$emit("sorting-data-by-price", this.shrot_by);
       console.log("this is sort filter", this.shrot_by);
+
+      this.checkparam = shrot_by;
+      console.log("this is a event 1", this.shrot_by);
+      this.wforwomendata();
+      //  this.lowtohigh=desc
+      // this.productsSort
     },
 
     toggleDetails() {
@@ -261,16 +251,14 @@ export default {
     },
   },
 
-
-
-//   mounted() {
-//       this.wforwomendata()
-//   },
+  mounted() {
+    this.wforwomendata();
+  },
 
   props: {
-    list: Array,
+    // list: Array,
     // productFilter: Array,
-    productsSort: Array,
+    // productsSort: Array,
   },
 };
 </script>

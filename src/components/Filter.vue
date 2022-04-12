@@ -87,6 +87,77 @@
 //   },
 
 //   methods: {
+methods: {
+    async apiCall(moreData){
+      let resp = await axios.get(
+      `https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=${moreData.page}&count=${moreData.count}&sort_by=${moreData.sort_by}&sort_dir=${moreData.sort_dir}&filter=${moreData.filter}`
+    );
+    console.warn("api data", resp.data.result.filters);
+    if(resp.data.response.success_message === "success"){
+    this.products = resp.data.result.products;
+    if(this.filters.length === 0){
+      this.filters = resp.data.result.filters;
+      this.sort = resp.data.result.sort;
+      this.sort.forEach(element => {
+        if(element.label === 'Price'){
+          element.label = 'Price(Low to High)';
+          element.sortBy = 'asc'
+        } else {
+          element.sortBy = 'desc';
+        }
+      });
+      this.sort.push({ code: 'selling_price', label: 'Price(High to Low)', sortBy: 'desc'})
+    }
+    } else {
+      this.products = [];
+      this.error_message = resp.data.response.error_message;
+    }
+    },
+    toggleButton(){
+      this.detailVisible = !this.detailVisible
+    },
+    sorting() {
+      this.moreData.sort_by = this.selectedSorting.code;
+      this.moreData.sort_dir = this.selectedSorting.sortBy;
+      this.apiCall(this.moreData)
+    },
+  
+    filterProduct(checkbox, filter, heading) {
+      console.log(heading)
+      if(heading === 'Price'){
+          filter.value = filter.value.replaceAll(' ', '+')
+        }
+      if (checkbox.target.checked) {
+        var comaSeparate = ""
+        if(this.moreData.filter !== ""){
+           comaSeparate = ","
+        }        
+        this.moreData.filter = `${this.moreData.filter}${comaSeparate}${filter.code}-${filter.value}`
+        this.apiCall(this.moreData);
+      }else {
+        this.moreData.filter = this.moreData.filter.replaceAll(filter.code+'-'+filter.value, '');
+        const last = this.moreData.filter.charAt(this.moreData.filter.length - 1);
+        const first = this.moreData.filter.charAt(0);
+        if(last === ',' || first === ','){
+          this.moreData.filter = last === ',' ?this.moreData.filter.slice(0, -1) : this.moreData.filter.slice(1, this.moreData.length)
+        }
+        this.apiCall(this.moreData);
+      }
+    },
+  },
+
+
+
+
+
+
+
+
+
+
+
+
+
 //     sorting() {
 //       // if (this.lable == "price") {
 //       //   this.productsSort = this.productsSort.sort(this.price);
@@ -104,9 +175,9 @@
     // filter() {
     //   console.log(this.filterSelected);
 
-    // }
-  },
-};
+//     // }
+//   },
+// };
 </script>
 <style scoped>
 .filters {

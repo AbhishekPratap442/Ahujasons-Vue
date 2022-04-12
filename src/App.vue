@@ -2,13 +2,8 @@
   <Navbar />
   <Main_header />
   <Proheading :productCount="productCount" :productName="productName" />
-  <ProductPage
-    :list="list"
-   
-    :productsSort="productsSort"
-    @sorting-data-by-price="sortingdatabyprice"
-  
-  />
+  <ProductPage/>
+    <!-- :list="list" -->
   <Pages />
   <Border />
   <Footer />
@@ -37,14 +32,14 @@ export default {
   },
   data() {
     return {
-      list: [],
-      productInfo: [],
-      productFilter: [],
-      productsSort: [],
+      // list: [],
+
+      // productFilter: [],
+      // productsSort: [],
       productCount: "",
       productName: "",
-      checkparam: "",
-      checkfilter: ""
+      // checkparam: "",
+      // checkfilter: ""
         // payloadData:{
         //     page: 1,
         //     count: 20,
@@ -61,27 +56,27 @@ export default {
     async wforwomendata() {
       console.log("apiCall called");
       let data = await axios.get(
-        ` https://pim.wforwoman.com/pim/pimresponse.php/`,
-        {
-          params: {
-            service: "category",
-            store: 1,
-            url_key: "top-wear-sets-dresses",
-            page: 1,
-            count: 20,
-            sort_by: this.checkparam,
-            sort_dir: "desc",
-            filter: "",
-          },
-        }
+        ` https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=`,
+        // {
+        //   params: {
+        //     service: "category",
+        //     store: 1,
+        //     url_key: "top-wear-sets-dresses",
+        //     page: 1,
+        //     count: 20,
+        //     sort_by: "",
+        //     sort_dir: "desc",
+        //     filter: "",
+        //   },
+        // }
       );
-            console.log( "this is a filter " , this.checkfilter );
+            // console.log( "this is a filter " , this.checkfilter );
       console.log("Api1", data.data);
       this.productCount = data.data.result.count;
       this.productName = data.data.result.name;
      
-      this.list = data.data.result.products;
-      this.productsSort = data.data.result.sort;
+      // this.list = data.data.result.products;
+      // this.productsSort = data.data.result.sort;
     },
 
 
@@ -112,13 +107,13 @@ export default {
 
 
 
-    sortingdatabyprice(checking) {
-      this.checkparam = checking;
-      console.log("this is a event 1", this.checkparam);
-      this.wforwomendata();
-      //  this.lowtohigh=desc
-      // this.productsSort
-    },
+    // sortingdatabyprice(checking) {
+    //   this.checkparam = checking;
+    //   console.log("this is a event 1", this.checkparam);
+    //   this.wforwomendata();
+    //   //  this.lowtohigh=desc
+    //   // this.productsSort
+    // },
   },
 
 
