@@ -4,7 +4,7 @@
     <!-- hamburger menu--------------------- -->
     <div class="navMenu">
       <svg
-        v-on:click="shop = !shop"
+        v-on:click="navbarTransform = !navbarTransform"
         class="navMenu"
         xmlns="http://www.w3.org/2000/svg"
         height="24px"
@@ -17,10 +17,10 @@
       </svg>
     </div>
   <!-- --------------------close Menu---------------------- -->
-    <div class="nav_links"  :class="shop ? 'active' : ''">
+    <div class="nav_links"  :class="navbarTransform ? 'active' : ''">
       <div class="login">
         <svg
-          v-on:click="shop = !shop" 
+          v-on:click="navbarTransform = !navbarTransform" 
           class="close_nav"
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
@@ -80,7 +80,7 @@
           </li>
         </ul>
       </div>
-      <div class="gray_div" v-on:click="shop = !shop" ></div>
+      <div class="gray_div" v-on:click="navbarTransform = !navbarTransform" ></div>
     </div>
 
     <div class="left1">
@@ -205,7 +205,7 @@ export default  {
 
   data(){
         return {
-            shop:false
+            navbarTransform:false
         }
   },
 };

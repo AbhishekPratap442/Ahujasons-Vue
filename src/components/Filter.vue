@@ -148,7 +148,56 @@ methods: {
 
 
 
+{
+  // if (event.target.checked) {
+      //   if (this.filtersoptions !== "") {
+      //     const coma = "";
+      //     coma = " ,";
+      //   this.filtersoptions = `${this.filtersoptions}${coma}${code}-${value}`
+      //   }
+      //   this.filtersoptions = event.target.checked;
+      //   console.log( " this is a this.filteroptions" ,this.filtersoptions);
+      //   this.wforwomendata();
+      // } 
+      // else {
+      //   this.filtersoptions = this.filtersoptions.replaceAll(
+      //     code + "-" + value,
+      //     ""
+      //   );
+      //   const id = event.target.id;
+      //   for (let data of this.filtersoptions) {
+      //     if (data === id) {
+      //       const index = this.filtersoptions.indexOf(data);
+      //        console.log(index)
+      //       this.filtersoptions.splice(index, 1);
+      //     }
+      //   }
+      // }
+      // console.log(index);
+      // this.wforwomendata(this.productFilterCetegory);
+      // console.log(this.productFilterCetegory);
 
+
+
+{
+
+
+
+   // applyfilter() {
+    //   const pars = this.productFilterCetegory.map((str) => {
+    //     return str;
+    //   });
+    //   const data = {
+    //     productFilterCetegory: pars,
+    //   };
+    //   console.log(data);
+    // },
+}
+
+
+
+
+}
 
 
 

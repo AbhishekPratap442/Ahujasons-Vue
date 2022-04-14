@@ -1,10 +1,7 @@
 <template>
   <Navbar />
   <Main_header />
-  <Proheading :productCount="productCount" :productName="productName" />
-  <ProductPage/>
-    <!-- :list="list" -->
-  <Pages />
+  <ProductPage :productFilter="productFilter" />
   <Border />
   <Footer />
 </template>
@@ -12,7 +9,6 @@
 import Main_header from "./components/Main_header.vue";
 import Navbar from "./components/Navbar.vue";
 import Proheading from "./components/Proheading.vue";
-
 import Pages from "./components/Pages.vue";
 import Border from "./components/Border.vue";
 import Footer from "./components/Footer.vue";
@@ -32,93 +28,25 @@ export default {
   },
   data() {
     return {
-      // list: [],
-
-      // productFilter: [],
-      // productsSort: [],
-      productCount: "",
-      productName: "",
-      // checkparam: "",
-      // checkfilter: ""
-        // payloadData:{
-        //     page: 1,
-        //     count: 20,
-        //     sort_by:"",
-        //     filter:"",
-        //     sort_dir:""
-        // }
-      // filter_lable:""
-      // value_key:""
+      loading: false,
+      productFilter: [],
     };
   },
-
   methods: {
-    async wforwomendata() {
+    async productInfoData() {
+      this.loading = true;
       console.log("apiCall called");
       let data = await axios.get(
-        ` https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=`,
-        // {
-        //   params: {
-        //     service: "category",
-        //     store: 1,
-        //     url_key: "top-wear-sets-dresses",
-        //     page: 1,
-        //     count: 20,
-        //     sort_by: "",
-        //     sort_dir: "desc",
-        //     filter: "",
-        //   },
-        // }
+        ` https://pim.wforwoman.com/pim/pimresponse.php/?service=category&store=1&url_key=top-wear-kurtas&page=1&count=20&sort_by=&sort_dir=desc&filter=`
       );
-            // console.log( "this is a filter " , this.checkfilter );
+      this.loading = false;
       console.log("Api1", data.data);
-      this.productCount = data.data.result.count;
-      this.productName = data.data.result.name;
-     
-      // this.list = data.data.result.products;
-      // this.productsSort = data.data.result.sort;
+      this.productFilter = data.data.result.filters;
     },
-
-
-
-
-
-//   sortingdatabyfilter(sidefiltercheck) {
-
-// this.checkfilter=sidefiltercheck
-// console.log("this is api fro app" , this.checkfilter);
-//  this.wforwomendata();
-//   },
-
-
-      
-  //   );
-
-
-
-
-      // console.log(checkfilter);
-      // this.checkfilter = checkfilter;
-      // if(this.checkparam== this.productFilter){
-      //         this.checkfilter
-      // }
-    // 
-    
-
-
-
-    // sortingdatabyprice(checking) {
-    //   this.checkparam = checking;
-    //   console.log("this is a event 1", this.checkparam);
-    //   this.wforwomendata();
-    //   //  this.lowtohigh=desc
-    //   // this.productsSort
-    // },
   },
 
-
   mounted() {
-    this.wforwomendata();
+    this.productInfoData();
   },
 };
 </script>
@@ -185,6 +113,31 @@ body {
   max-width: 1600px;
   margin: 0 auto;
 }
+/* -----------------------ProHeadeing---------------- */
+#proheading {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+#proheading p {
+  font-family: "Playfair Display";
+  font-size: 32px;
+}
+#proheading span {
+  margin-top: 3px;
+  color: #303030;
+  font-size: 18px;
+  opacity: 70%;
+}
+
+@media (max-width: 767px) {
+  #proheading p {
+    font-size: 28px;
+  }
+}
+
 /* --------------Media Queri------------------------- */
 
 .hamburder_menu {
@@ -382,16 +335,6 @@ body {
     display: none;
   }
 
-  .pagesnation {
-    margin-top: 40px;
-    display: flex;
-    /* justify-content: unset; */
-  }
-  .page {
-    margin-top: 0px;
-    margin-left: 23px;
-    margin-right: 0px;
-  }
   .no_pages span {
     font-family: "Jost";
     font-size: 14px;

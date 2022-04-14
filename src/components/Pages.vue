@@ -78,11 +78,6 @@ name:'Pages'
 }
 
 
-
-
-
-
-
 }
 
 </style>

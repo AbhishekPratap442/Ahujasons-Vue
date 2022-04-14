@@ -1,11 +1,20 @@
 <template>
   <div>
+    <div v-if="loading" class="loader"></div>
+    <div>{{ spinner }}</div>
+    <div>
+      <div class="container">
+        <div id="proheading">
+          <p>{{ productName }}</p>
+          <span>{{ productCount }} Items</span>
+        </div>
+      </div>
+    </div>
+
     <div class="filters">
-      <div
-        class="left_filter"
-        v-on:click="filterSeen = !filterSeen"
-        @click="getfilteroptions"
-      >
+      <div class="left_filter" v-on:click="filterSeen = !filterSeen">
+     
+
         <h3 v-on:click="showfilter = !showfilter">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -74,6 +83,9 @@
     <div class="products_img">
       <div class="side_filter" v-if="filterSeen">
         <div>
+          <div class="btn" v-if="!removeFilter1">
+            <button @click="removeFilter">Remove Filter</button>
+          </div>
           <h3
             class="filter_type"
             v-for="filters in productFilter"
@@ -97,23 +109,24 @@
                 </svg>
               </span>
             </div>
-            <div class="btn">
-              <!-- <button @click="applyfilter">Apply Filter</button> -->
-            </div>
+
             <div>
-              <div class="filter_type_sub_option" v-if="filters.isVisible">
+              <div class="filter_type_sub_option" v-show="filters.isVisible">
                 <ul v-for="option in filters.options" :key="option.value_key">
-                  <label class="checkbox" for="check1">
+                  <label class="checkbox">
                     <input
                       type="checkbox"
-                      name="check1"
+                      v-bind="checked"
                       @click="
                         sortingdatabyfilter($event, option.value, option.code)
                       "
                       :id="option.value_key"
                     />
                     <span class="checkmark"></span>
-                    <span class="label">
+                    <span
+                      class="label"
+                      v-on:click="removeFilter1 = !removeFilter1"
+                    >
                       {{ option.value }} ({{ option.total }})</span
                     >
                   </label>
@@ -124,7 +137,7 @@
         </div>
       </div>
 
-      <div class="api_products">
+      <div class="api_products" :disabled="loading">
         <div v-for="item in list" :key="item.id" class="api_products_img">
           <div class="productImg">
             <img :src="item.image" />
@@ -138,24 +151,60 @@
         </div>
       </div>
     </div>
+
+    <!-- ---------------------------page------------------------ -->
+
+    <div class="pagesnation">
+      <div class="page" v-if="this.productCount / 20 > 1">
+        <p>
+          Page {{ this.pageofpagination }} of
+          {{ Math.ceil(this.productCount / 20) }}
+        </p>
+      </div>
+
+      <div class="Pagenation_count">
+        <ul class="no_pages" v-if="this.productCount / 20 > 1">
+          <li
+            v-for="page in 6"
+            :key="page.id"
+            @click="pagination($event)"
+            v-bind="page"
+          >
+            {{ page }}
+          </li>
+
+          <li v-if="this.productCount / 20 > 1">.....</li>
+
+          <li
+            v-if="this.productCount / 20 > 1"
+            @click="pagination($event)"
+            v-bind="page"
+          >
+            {{ Math.ceil(this.productCount / 20) }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+
 export default {
   name: "ProductsPage",
-  data: {
-    seen: true,
+
+  props: {
+    productFilter: Array,
   },
   data() {
     return {
       list: [],
-      productFilter: [],
-      productFilterCetegory: [],
+
       productsSort: [],
-      seen: true,
-      toggle: true,
+      productCount: "",
+      productName: "",
+
       detailsAreVisible: false,
       filterSeen: false,
       showfilter: false,
@@ -164,18 +213,25 @@ export default {
       value: "",
       filtersoptions: "",
       checkparam: "",
+      pageofpagination: 1,
+      productFilterCetegory: [],
+
+      removeFilter1: true,
+      loading: false,
+      spinner: "",
     };
   },
   methods: {
-    async wforwomendata() {
+    async productInfoData() {
+      this.loading = true;
       let data = await axios.get(
         `  https://pim.wforwoman.com/pim/pimresponse.php`,
         {
           params: {
             service: "category",
             store: 1,
-            url_key: "top-wear-sets-dresses",
-            page: 1,
+            url_key: "top-wear-kurtas",
+            page: this.pageofpagination,
             count: 20,
             sort_by: this.shrot_by,
             sort_dir: "desc",
@@ -183,86 +239,93 @@ export default {
           },
         }
       );
-      this.productFilter = data.data.result.filters;
-      console.log("this is product list", this.list);
+      this.loading = false;
+
       this.list = data.data.result.products;
       this.productsSort = data.data.result.sort;
+      this.productCount = data.data.result.count;
+      this.productName = data.data.result.name;
     },
 
     sortingdatabyfilter(event, value, code) {
       console.log("event=", event, "value=", value, "code=", code);
-      // this.filtersoptions.push(code + "-" + value);
-      this.filtersoptions = `${code}-${value}`;
-      this.wforwomendata();
 
-      if (event.target.checked) {
-        const coma = "";
-        if (this.filtersoptions !== "") {
-          coma = " ,";
-        }
-        this.filtersoptions = `${this.filtersoptions}${coma}${code}-${value}`;
-        this.wforwomendata();
+      if (!this.productFilterCetegory.includes(`${code}-${value}`)) {
+        console.log("data is pushe", `${code}-${value}`);
+        this.productFilterCetegory.push(`${code}-${value}`);
+        console.log("this is array", this.productFilterCetegory);
+        this.filtersoptions = this.productFilterCetegory.toString();
       } else {
-        this.filtersoptions = this.filtersoptions.replaceAll(
-          code + "-" + value,
-          ""
+        let checkingIndex = this.productFilterCetegory.indexOf(
+          `${code}-${value}`
         );
-
-        const id = event.target.id;
-        for (let data of this.filtersoptions) {
-          if (data === id) {
-            const index = this.filtersoptions.indexOf(data);
-            //  console.log(index)
-            this.filtersoptions.splice(index, 1);
-          }
-        }
+        console.log("data is delete", `${code}-${value}`);
+        this.productFilterCetegory.splice(checkingIndex, 1);
+        console.log("this is array", this.productFilterCetegory);
+        this.filtersoptions = this.productFilterCetegory.toString();
       }
-      console.log(this.productFilterCetegory);
-      this.wforwomendata(this.productFilterCetegory);
-      console.log(this.productFilterCetegory);
-    },
-    applyfilter() {
-      const pars = this.productFilterCetegory.map((str) => {
-        return str;
-      });
-      const data = {
-        productFilterCetegory: pars,
-      };
-      console.log(data);
+      this.productInfoData();
     },
 
-    getfilteroptions() {
-      this.wforwomendata();
+    removeFilter() {
+      if (!this.productFilterCetegory.length == 0 || !this.shrot_by == "") {
+        this.productFilterCetegory = [];
+
+        this.shrot_by = "";
+
+        this.filtersoptions = this.productFilterCetegory.toString();
+        this.productInfoData(this.productFilter);
+        // this.productFilter = data.data.result.filters;
+      }
+      this.productInfoData();
     },
 
     sortingdatabyprice(shrot_by) {
-      // this.$emit("sorting-data-by-price", this.shrot_by);
-      console.log("this is sort filter", this.shrot_by);
-
       this.checkparam = shrot_by;
-      console.log("this is a event 1", this.shrot_by);
-      this.wforwomendata();
-      //  this.lowtohigh=desc
-      // this.productsSort
+      // console.log("this is sort filter", this.shrot_by);
+      this.productInfoData();
     },
 
     toggleDetails() {
       this.detailsAreVisible = !this.detailsAreVisible;
     },
+
+    pagination(paginationNumbers) {
+      this.pageofpagination = paginationNumbers.target.innerHTML;
+
+      console.log(this.pageofpagination);
+
+      this.productInfoData();
+    },
   },
 
   mounted() {
-    this.wforwomendata();
-  },
-
-  props: {
-    // list: Array,
-    // productFilter: Array,
-    // productsSort: Array,
+    this.productInfoData();
   },
 };
 </script>
 <style scoped>
+.loader {
+  position: absolute;
+
+  left: 48vw;
+  top: 35vh;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #720c03;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .hide {
   display: none;
 }
@@ -309,10 +372,6 @@ body {
   padding: 12px 12px;
 }
 /* Customize the label (the container) */
-.check-box-group {
-  display: flex;
-  flex-direction: column;
-}
 
 .checkbox {
   cursor: pointer;
@@ -342,7 +401,7 @@ body {
 }
 
 .checkbox input {
-  /* display: none; */
+  display: none;
 }
 
 /* -------------------------------------Products -------------------- */
@@ -419,7 +478,86 @@ svg {
   color: green;
 }
 
+.btn button {
+  font-size: 12px;
+  font-weight: 100;
+  border: 1px solid;
+  padding: 12px 12px;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+
+/* -------------------------page------------------------------  */
+.page {
+  margin-top: 15px;
+  margin-left: 23px;
+  margin-right: 0px;
+  position: absolute;
+}
+.no_pages {
+  display: flex;
+  list-style: none;
+  position: absolute;
+  left: 38vw;
+}
+.no_pages li {
+  cursor: pointer;
+  padding: 9px 15px;
+  margin: 5px 0px;
+}
+.no_pages li :active {
+  background-color: #4c0b36;
+  color: #ffffff;
+}
+.no_pages li:hover {
+  background-color: #4c0b36;
+  color: #ffffff;
+}
+.no_of_pages {
+  display: flex;
+}
+.Pagenation_count {
+  display: flex;
+  position: absolute;
+}
+.pagesnation {
+  margin: 35px 0px;
+  display: flex;
+  position: relative;
+}
+.midPageCount {
+  position: absolute;
+  cursor: pointer;
+  left: 60vw;
+  list-style: none;
+}
+.lastPageCount {
+  position: absolute;
+  cursor: pointer;
+  left: 63vw;
+  list-style: none;
+}
+.no_pages span {
+  font-family: "Jost";
+  font-size: 18px;
+  margin: 8px;
+  padding: 9px;
+}
+.no_pages span:last-child {
+  border: 1px solid #e4e4e4;
+}
+.no_pages span:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #4c0b36;
+}
+
 @media (max-width: 767px) {
+  .btn {
+    position: absolute;
+    right: 26px;
+  }
+
   .api_products_img {
     width: 49%;
   }
@@ -433,6 +571,7 @@ svg {
     background-color: white;
     justify-content: space-evenly;
   }
+
   .left_filter {
     width: 48%;
   }
@@ -448,7 +587,7 @@ svg {
     position: relative;
     background: #ffffff;
     border: none;
-    top: -27vh;
+    top: -308 vh;
     z-index: 1;
     left: 0px;
     padding: 26px;
@@ -459,6 +598,28 @@ svg {
   }
   #shrot_by {
     width: 93%;
+  }
+
+  /* -----------------------page------------------ */
+  .page {
+    font-size: 12px;
+    margin-top: 5px;
+    margin-left: 23px;
+    margin-right: 0px;
+  }
+  .no_pages {
+    margin: 0px 1px;
+    font-size: 12px;
+  }
+  .no_pages li {
+    cursor: pointer;
+    padding: 0px 5px;
+  }
+  .no_pages span {
+    font-family: "Jost";
+    font-size: 14px;
+    margin: 2px;
+    padding: 8px;
   }
 }
 </style>

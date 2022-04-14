@@ -374,9 +374,9 @@ export default{
   .side_filter{
     display: none  !important;
   }
-  .display {
+  /* .display {
     display: block;
-  }
+  } */
 
 }
 
