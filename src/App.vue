@@ -1,12 +1,12 @@
 <template>
   <Navbar />
-  <Main_header />
+  <!-- <Main_header /> -->
   <ProductPage :productFilter="productFilter" />
   <Border />
   <Footer />
 </template>
 <script>
-import Main_header from "./components/Main_header.vue";
+// import Main_header from "./components/Main_header.vue";
 import Navbar from "./components/Navbar.vue";
 import Proheading from "./components/Proheading.vue";
 import Pages from "./components/Pages.vue";
@@ -19,7 +19,7 @@ export default {
   name: "App",
   components: {
     Navbar,
-    Main_header,
+    // Main_header,
     Proheading,
     ProductPage,
     Pages,
@@ -182,20 +182,7 @@ body {
     height: 100vh;
     background-color: #05040445;
   }
-  .nav_links {
-    z-index: 1;
-    /* justify-content: center; */
-    display: flex;
-    flex-direction: row;
-    position: absolute;
-    top: 14vh;
-    background-color: #272727d1;
-    transform: translateX(-100vw);
-    transition: all 0.5s ease-in-out;
-    width: 100%;
-    top: 0;
-    left: 0;
-  }
+  
   .active {
     transform: translateX(0vw);
   }
@@ -445,19 +432,7 @@ body {
   .my_profile_para {
     display: none;
   }
-  .side_filter {
-    position: absolute;
 
-    width: 45%;
-
-    position: absolute;
-    background: white;
-    border: 1px solid;
-    top: 16px;
-    z-index: 1;
-    left: 7px;
-    padding: 0px;
-  }
   .display {
     display: block;
   }

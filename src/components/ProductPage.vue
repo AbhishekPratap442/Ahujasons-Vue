@@ -1,4 +1,5 @@
 <template>
+  <Main_header />
   <div>
     <div v-if="loading" class="loader"></div>
     <div>{{ spinner }}</div>
@@ -7,11 +8,35 @@
         <div id="proheading">
           <p>{{ productName }}</p>
           <span>{{ productCount }} Items</span>
+          <span v-show="this.productCount < 1"> No result found </span>
         </div>
       </div>
     </div>
 
     <div class="filters">
+      <div class="applied_filter">
+        <ul
+          v-for="(checkedValues, index) in checkedValues"
+          :key="checkedValues.index"
+        >
+          <li>
+            {{ checkedValues }}
+            <svg
+              v-on:click="closedFilter(value, index)"
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 0 24 24"
+              width="24px"
+              fill="#000000"
+            >
+              <path d="M0 0h24v24H0V0z" fill="none" />
+              <path
+                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+              />
+            </svg>
+          </li>
+        </ul>
+      </div>
       <div class="left_filter" v-on:click="filterSeen = !filterSeen">
         <h3 v-on:click="showfilter = !showfilter">
           <svg
@@ -66,9 +91,8 @@
           @change="sortingdatabyprice()"
           v-model="shrot_by"
         >
-          <option selected>SORT BY</option>
+          <option value="" selected>SORT BY</option>
           <option
-             
             :value="sort.code"
             v-for="sort in productsSort"
             :key="sort.id"
@@ -82,9 +106,9 @@
     <div class="products_img">
       <div class="side_filter" v-if="filterSeen">
         <div>
-          <!-- <div class="btn" v-if="removeFilter1">
-            <button @click="removeFilter" v-bind="removelAll">Remove Filter</button>
-          </div> -->
+          <div class="btn" v-if="removeFilter1">
+            <button @click="removeFilter">Remove Filter</button>
+          </div>
           <h3
             class="filter_type"
             v-for="filters in productFilter"
@@ -97,6 +121,7 @@
               <span>{{ filters.filter_lable }}</span>
               <span>
                 <svg
+                  v-show="!filters.isVisible"
                   xmlns="http://www.w3.org/2000/svg"
                   height="24px"
                   viewBox="0 0 24 24"
@@ -106,30 +131,34 @@
                   <path d="M0 0h24v24H0V0z" fill="none" />
                   <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
                 </svg>
+                <svg
+                  v-show="filters.isVisible"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 0 24 24"
+                  width="24px"
+                  fill="#000000"
+                >
+                  <path d="M0 0h24v24H0V0z" fill="none" />
+                  <path d="M19 13H5v-2h14v2z" />
+                </svg>
               </span>
             </div>
 
-            <div>
+            <div class="options_box">
               <div class="filter_type_sub_option" v-show="filters.isVisible">
                 <ul v-for="option in filters.options" :key="option.value_key">
-                  <label
-                    class="checkbox"
-                    v-on:click="removeFilter1 = !removeFilter1"
+                  <label class="checkbox" for="check">
+                    {{ option.value }} ({{ option.total }})</label
                   >
-                    <!-- v-bind="checked" -->
-                    <input
-                      type="checkbox"
-                      @click="
-                        sortingdatabyfilter($event, option.value, option.code)
-                      "
-                      :value="option.value_key"
-                      :id="option.value_key"
-                    />
-                    <span class="checkmark"></span>
-                    <span class="label">
-                      {{ option.value }} ({{ option.total }})</span
-                    >
-                  </label>
+
+                  <input
+                  id="check"
+                    type="checkbox"
+                    @click="
+                      sortingdatabyfilter($event, option.value, option.code)
+                    "
+                  />
                 </ul>
               </div>
             </div>
@@ -163,7 +192,7 @@
       </div>
 
       <div class="Pagenation_count">
-        <ul class="no_pages " v-if="this.productCount / 20 > 1">
+        <ul class="no_pages" v-if="this.productCount / 20 > 1">
           <li
             class="active"
             v-for="page in 6"
@@ -191,10 +220,13 @@
 
 <script>
 import axios from "axios";
+import Main_header from "./Main_header.vue";
 
 export default {
   name: "ProductsPage",
-
+  components: {
+    Main_header,
+  },
   props: {
     productFilter: Array,
   },
@@ -205,21 +237,22 @@ export default {
       productCount: "",
       productName: "",
       selected: "selected",
-        notSelected: "",
+      notSelected: "",
       detailsAreVisible: false,
       filterSeen: false,
       showfilter: false,
       isVisible: false,
+      closeFilter: false,
       shrot_by: "",
       value: "",
       filtersoptions: "",
       checkparam: "",
       pageofpagination: 1,
       productFilterCetegory: [],
-
       removeFilter1: true,
       loading: false,
       spinner: "",
+      checkedValues: [],
     };
   },
   methods: {
@@ -251,24 +284,41 @@ export default {
     sortingdatabyfilter(event, value, code) {
       console.log("event=", event, "value=", value, "code=", code);
 
-      if (!this.productFilterCetegory.includes(`${code}-${value}`)) {
-        console.log("data is pushe", `${code}-${value}`);
+      if (
+        !this.productFilterCetegory.includes(`${code}-${value}`) ||
+        !this.checkedValues.includes(`${value}`)
+      ) {
         this.productFilterCetegory.push(`${code}-${value}`);
-        console.log("this is array", this.productFilterCetegory);
+        this.checkedValues.push(`${value}`);
+
         this.filtersoptions = this.productFilterCetegory.toString();
       } else {
         let checkingIndex = this.productFilterCetegory.indexOf(
           `${code}-${value}`
         );
-        console.log("data is delete", `${code}-${value}`);
+        let checkedValuesIndex = this.checkedValues.indexOf(`${value}`);
         this.productFilterCetegory.splice(checkingIndex, 1);
-        console.log("this is array", this.productFilterCetegory);
+        this.checkedValues.splice(checkedValuesIndex, 1);
+        // console.log("this is array", this.productFilterCetegory);
         this.filtersoptions = this.productFilterCetegory.toString();
       }
+      //  this.checkedValues= this.checkedValues;
+      // console.log("this is  a checked values",this.checkedValues)
       this.productInfoData();
     },
 
-    removeFilter(checked) {
+    closedFilter(value, index) {
+      console.log("index=", index, "value=", value);
+      console.log("AAA", this.checkedValues);
+      if (this.checkedValues.includes(index)) {
+        // let checkedValuesIndex =this.checkedValues.indexOf(index);
+        this.checkedValues.splice(index, 1);
+      }
+
+      this.productInfoData();
+    },
+
+    removeFilter() {
       if (!this.productFilterCetegory.length == 0 || !this.shrot_by == "") {
         this.productFilterCetegory = [];
 
@@ -294,7 +344,6 @@ export default {
 
     pagination(paginationNumbers) {
       this.pageofpagination = paginationNumbers.target.innerHTML;
-
       console.log(this.pageofpagination);
 
       this.productInfoData();
@@ -324,33 +373,40 @@ export default {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 .hide {
   display: none;
 }
+
 body {
   box-sizing: border-box;
   margin: 0 auto;
   padding: 20px;
 }
+
 .filters {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 26px;
 }
+
 .left_filter {
   border: 1px solid;
   padding: 12px 12px;
   cursor: pointer;
 }
+
 .left_filter h3 {
   font-size: 12px;
   font-weight: 100;
 }
+
 .left_filter h3 svg {
   width: 14px;
   padding: 0px 9px;
@@ -359,6 +415,7 @@ body {
 .right_filter {
   border: 1px solid;
 }
+
 .right_filter select {
   border: none;
   padding: 12px 15px;
@@ -373,6 +430,7 @@ body {
 .right_filter select option {
   padding: 12px 12px;
 }
+
 /* Customize the label (the container) */
 
 .checkbox {
@@ -406,30 +464,61 @@ body {
   display: none;
 }
 
+.options_box {
+  border-bottom: 1px solid;
+  margin-bottom: 8px;
+}
+
+.applied_filter {
+  display: flex;
+  position: absolute;
+  left: 20vw;
+}
+
+.applied_filter ul {
+  border: 1px solid;
+  border-radius: 20px;
+  margin: 12px;
+}
+
+.applied_filter ul li {
+  list-style: none;
+  font-weight: 900;
+  font-size: 9px;
+  display: flex;
+  padding: 1px 12px;
+  align-items: center;
+}
+
 /* -------------------------------------Products -------------------- */
 .products_img {
   display: flex;
   padding: 26px;
   box-shadow: 0px 5px 0px -4px #e4e4e4;
 }
+
 .side_filter {
   padding-right: 22px;
   width: 18%;
 }
+
 .filter_type {
   font-size: 14px;
   font-weight: 100;
 }
+
 .filter_type_option {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid;
-  margin-bottom: 18px;
+
+  margin-bottom: 1px;
 }
+
 .filter_type_option span {
   margin: 9px 0px;
 }
+
 .filter_type_sub_option ul {
   max-height: 250px;
   overflow: auto;
@@ -438,48 +527,65 @@ body {
   /* padding: 0px 4px; */
   list-style: none;
 }
+
 .filter_type_sub_option ul li {
   padding-left: 12px;
   /* width: 300px; height: 200px; overflow: auto */
 }
+
 svg {
   width: 15px;
 }
+
 #checkbox {
   color: red;
 }
+
 .api_products {
   width: 100%;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
 .api_products_img {
   width: 22%;
 }
+
 .productImg img {
   width: 100%;
 }
+
 .productsSpecs {
   margin-bottom: 29px;
 }
+
 .productImg h4 {
   font-size: 14px;
   font-weight: 100;
 }
+
 .productImg span {
   font-size: 14px;
   color: #4c0b36;
 }
+
 #discount {
   padding: 0px 22px;
   color: red;
 }
+
 #stock {
   font-size: 14px;
   color: green;
 }
 
+/* .btn{
+    position: relative;
+    left: 18vw;
+    top: 12vh;
+    display: inline-block;
+} */
 .btn button {
   font-size: 12px;
   font-weight: 100;
@@ -503,11 +609,13 @@ svg {
   position: absolute;
   left: 38vw;
 }
+
 .no_pages li {
   cursor: pointer;
   padding: 9px 15px;
   margin: 5px 0px;
 }
+
 /* .active, .no_pages li:hover {
   background-color: #666;
   color: white;
@@ -516,43 +624,52 @@ svg {
   background-color: #4c0b36;
   color: #ffffff;
 }
+
 .no_pages li:hover {
   background-color: #4c0b36;
   color: #ffffff;
 }
+
 .no_of_pages {
   display: flex;
 }
+
 .Pagenation_count {
   display: flex;
   position: absolute;
 }
+
 .pagesnation {
   margin: 35px 0px;
   display: flex;
   position: relative;
 }
+
 .midPageCount {
   position: absolute;
   cursor: pointer;
   left: 60vw;
   list-style: none;
 }
+
 .lastPageCount {
   position: absolute;
   cursor: pointer;
   left: 63vw;
   list-style: none;
 }
+
 .no_pages span {
   font-family: "Jost";
   font-size: 18px;
   margin: 8px;
   padding: 9px;
 }
+
 .no_pages span:last-child {
   border: 1px solid #e4e4e4;
 }
+
 .no_pages span:hover {
   cursor: pointer;
   color: white;
@@ -568,11 +685,12 @@ svg {
   .api_products_img {
     width: 49%;
   }
+
   .filters {
     display: flex;
     padding: 0px;
     width: 100%;
-    z-index: 222;
+    z-index: 2222;
     position: fixed;
     bottom: 0;
     background-color: white;
@@ -581,7 +699,11 @@ svg {
 
   .left_filter {
     width: 48%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
+
   .right_filter {
     width: 52%;
   }
@@ -589,12 +711,18 @@ svg {
   .right_filter select {
     padding: 13px 7px;
   }
+
+  .options_box {
+    border-bottom: 1px solid;
+    margin-bottom: 8px;
+  }
+
   .side_filter {
     width: 100%;
     position: relative;
     background: #ffffff;
     border: none;
-    top: -308 vh;
+    top: -30vh;
     z-index: 1;
     left: 0px;
     padding: 26px;
@@ -603,6 +731,7 @@ svg {
   .products_img {
     padding: 4px;
   }
+
   #shrot_by {
     width: 93%;
   }
@@ -614,31 +743,35 @@ svg {
     margin-left: 23px;
     margin-right: 0px;
   }
+
   .no_pages {
     margin: 0px 1px;
     font-size: 12px;
   }
+
   .no_pages li {
     cursor: pointer;
     padding: 0px 5px;
   }
+
   .no_pages span {
     font-family: "Jost";
     font-size: 14px;
     margin: 2px;
     padding: 8px;
   }
-  .loader {
-  position: absolute;
 
-  left: 42vw;
-  top: 35vh;
-  border: 6px solid #f3f3f3;
-  border-top: 6px solid #720c03;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  animation: spin 2s linear infinite;
-}
+  .loader {
+    position: absolute;
+
+    left: 42vw;
+    top: 35vh;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #720c03;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 2s linear infinite;
+  }
 }
 </style>

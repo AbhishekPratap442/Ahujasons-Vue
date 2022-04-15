@@ -342,7 +342,7 @@ svg {
     background-color: #05040445;
   }
   .nav_links {
-    z-index: 1;
+    z-index: 22222;
     /* justify-content: center; */
     display: flex;
     flex-direction: row;
@@ -364,7 +364,7 @@ svg {
   }
 
   .nav_links ul {
-    margin: 24px;
+       margin: 4px 15px;
   }
   .nav_links ul li {
     margin: 16px 28px;

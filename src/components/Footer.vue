@@ -9,38 +9,43 @@
     <div class="footer_links" id="shop">
       <h3 v-on:click="shop = !shop">
         SHOP
-        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+        <span><svg  v-show="!shop" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg></span>
+          </svg>
+          <svg  v-show="shop" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13H5v-2h14v2z"/></svg>
+          
+          </span>
+
       </h3>
 <!-- v-if="shop" -->
       <div class="para"   :class="{active : shop}" >
-        <p>Men</p>
-        <p>Women</p>
-        <p>Home</p>
-        <p>Sale</p>
-        <p>Collection</p>
+        <p> <a href="#"> Men</a></p>
+        <p> <a href="#"> Women</a></p>
+        <p> <a href="#"> Home</a></p>
+        <p> <a href="#"> Sale</a></p>
+        <p> <a href="#"> Collection</a></p>
       </div>
     </div>
 
     <div class="footer_links" >
       <h3 id="quick_links" v-on:click="quick_links = !quick_links">
         QUICK LINKS
-        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+        <span><svg v-show="!quick_links" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg></span>
+          </svg>
+          <svg  v-show="quick_links" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13H5v-2h14v2z"/></svg></span>
       </h3>
       <div class="footer_links">
         <div class="quick_links_para"  :class="{active : quick_links}">
-          <p>Ahujasons Expore</p>
-          <p>Ahujasons Wholesale</p>
-          <p>Our Story</p>
-          <p>Legacy</p>
-          <p>Craftsman ship</p>
-          <p>Our Store</p>
-          <p>Blogs</p>
+          <p> <a href="#">Ahujasons Expore</a> </p>
+          <p> <a href="#">Ahujasons Wholesale</a> </p>
+          <p> <a href="#">Our Story</a> </p>
+          <p> <a href="#">Legacy</a> </p>
+          <p> <a href="#">Craftsman ship</a> </p>
+          <p> <a href="#">Our Store</a> </p>
+          <p> <a href="#">Blogs</a> </p>
         </div>
       </div>
     </div>
@@ -48,34 +53,36 @@
     <div class="footer_links" id="customer_services">
       <h3 id="customer_services"  v-on:click="customer_services = !customer_services">
         CUSTOMER SERVICE
-        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+        <span><svg v-show="!customer_services" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg></span>
+          </svg>
+          <svg  v-show="customer_services" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13H5v-2h14v2z"/></svg></span>
       </h3>
       <div class="customer_services_para" :class="{active : customer_services}">
-        <p>Terms and Condition</p>
-        <p>Shipping & Delivery</p>
-        <p>Returns & Cancellation</p>
-        <p>Contact us</p>
-        <p>Store appointment</p>
+        <p> <a href="#"> Terms and Condition</a></p>
+        <p> <a href="#"> Shipping & Delivery</a></p>
+        <p> <a href="#"> Returns & Cancellation</a></p>
+        <p> <a href="#"> Contact us</a></p>
+        <p> <a href="#"> Store appointment</a></p>
       </div>
     </div>
 
     <div class="footer_links">
       <h3 id="my_profile" v-on:click="my_profile = !my_profile">
         MY PROFILE
-        <span><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
+        <span><svg v-show="!my_profile" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000">
             <path d="M0 0h24v24H0V0z" fill="none" />
             <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-          </svg></span>
+          </svg>
+          <svg  v-show="my_profile" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M19 13H5v-2h14v2z"/></svg></span>
       </h3>
       <div class="my_profile_para" :class="{active : my_profile}">
-        <p>My Account</p>
-        <p>Track Order</p>
-        <p>My Cart</p>
-        <p>Wishlist</p>
-        <p>Order History</p>
+        <p> <a href="#"> My Account</a></p>
+        <p> <a href="#"> Track Order</a></p>
+        <p> <a href="#"> My Cart</a></p>
+        <p> <a href="#"> Wishlist</a></p>
+        <p> <a href="#"> Order History</a></p>
       </div>
     </div>
 
@@ -228,11 +235,19 @@ export default{
   display: flex;
   flex-direction: column;
 }
+.footer_links a{
+  text-decoration: none;
+    color: #372b54;
+}
+.footer_links a:hover{
+  text-decoration: underline;
+}
 .footer_links h3 {
   font-size: 16px;
   margin: 6px 10px 6px 16px;
   font-weight: 100;
   font-size: 14px;
+  cursor: pointer;
 }
 .footer_links p {
   font-size: 14px;
@@ -251,6 +266,9 @@ export default{
 .email input{
   width: 76%;
   border:none
+}
+.email input:focus{
+  outline: none;
 }
 
 .sign_up h3{
@@ -366,13 +384,13 @@ export default{
     display: block !important;
   }
   .customer_services_para {
-    display: none  !important;
+    display: none  ;
   }
   .my_profile_para {
-    display: none  !important;
+    display: none  ;
   }
   .side_filter{
-    display: none  !important;
+    display: none  ;
   }
   /* .display {
     display: block;
