@@ -13,8 +13,6 @@
 
     <div class="filters">
       <div class="left_filter" v-on:click="filterSeen = !filterSeen">
-     
-
         <h3 v-on:click="showfilter = !showfilter">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -70,6 +68,7 @@
         >
           <option selected>SORT BY</option>
           <option
+             
             :value="sort.code"
             v-for="sort in productsSort"
             :key="sort.id"
@@ -83,9 +82,9 @@
     <div class="products_img">
       <div class="side_filter" v-if="filterSeen">
         <div>
-          <div class="btn" v-if="!removeFilter1">
-            <button @click="removeFilter">Remove Filter</button>
-          </div>
+          <!-- <div class="btn" v-if="removeFilter1">
+            <button @click="removeFilter" v-bind="removelAll">Remove Filter</button>
+          </div> -->
           <h3
             class="filter_type"
             v-for="filters in productFilter"
@@ -113,20 +112,21 @@
             <div>
               <div class="filter_type_sub_option" v-show="filters.isVisible">
                 <ul v-for="option in filters.options" :key="option.value_key">
-                  <label class="checkbox">
+                  <label
+                    class="checkbox"
+                    v-on:click="removeFilter1 = !removeFilter1"
+                  >
+                    <!-- v-bind="checked" -->
                     <input
                       type="checkbox"
-                      v-bind="checked"
                       @click="
                         sortingdatabyfilter($event, option.value, option.code)
                       "
+                      :value="option.value_key"
                       :id="option.value_key"
                     />
                     <span class="checkmark"></span>
-                    <span
-                      class="label"
-                      v-on:click="removeFilter1 = !removeFilter1"
-                    >
+                    <span class="label">
                       {{ option.value }} ({{ option.total }})</span
                     >
                   </label>
@@ -163,8 +163,9 @@
       </div>
 
       <div class="Pagenation_count">
-        <ul class="no_pages" v-if="this.productCount / 20 > 1">
+        <ul class="no_pages " v-if="this.productCount / 20 > 1">
           <li
+            class="active"
             v-for="page in 6"
             :key="page.id"
             @click="pagination($event)"
@@ -200,11 +201,11 @@ export default {
   data() {
     return {
       list: [],
-
       productsSort: [],
       productCount: "",
       productName: "",
-
+      selected: "selected",
+        notSelected: "",
       detailsAreVisible: false,
       filterSeen: false,
       showfilter: false,
@@ -267,7 +268,7 @@ export default {
       this.productInfoData();
     },
 
-    removeFilter() {
+    removeFilter(checked) {
       if (!this.productFilterCetegory.length == 0 || !this.shrot_by == "") {
         this.productFilterCetegory = [];
 
@@ -275,6 +276,7 @@ export default {
 
         this.filtersoptions = this.productFilterCetegory.toString();
         this.productInfoData(this.productFilter);
+
         // this.productFilter = data.data.result.filters;
       }
       this.productInfoData();
@@ -494,6 +496,7 @@ svg {
   margin-right: 0px;
   position: absolute;
 }
+
 .no_pages {
   display: flex;
   list-style: none;
@@ -505,7 +508,11 @@ svg {
   padding: 9px 15px;
   margin: 5px 0px;
 }
-.no_pages li :active {
+/* .active, .no_pages li:hover {
+  background-color: #666;
+  color: white;
+} */
+.no_pages li .active {
   background-color: #4c0b36;
   color: #ffffff;
 }
@@ -621,5 +628,17 @@ svg {
     margin: 2px;
     padding: 8px;
   }
+  .loader {
+  position: absolute;
+
+  left: 42vw;
+  top: 35vh;
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #720c03;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 2s linear infinite;
+}
 }
 </style>
