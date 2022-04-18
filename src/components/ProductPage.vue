@@ -22,7 +22,7 @@
           <li>
             {{ checkedValues }}
             <svg
-              v-on:click="closedFilter(value, index)"
+              v-on:click="closedFilter(index)"
               xmlns="http://www.w3.org/2000/svg"
               height="24px"
               viewBox="0 0 24 24"
@@ -148,17 +148,22 @@
             <div class="options_box">
               <div class="filter_type_sub_option" v-show="filters.isVisible">
                 <ul v-for="option in filters.options" :key="option.value_key">
-                  <label class="checkbox" for="check">
-                    {{ option.value }} ({{ option.total }})</label
-                  >
+                  <label class="checkbox" >
+                   
 
                   <input
-                  id="check"
-                    type="checkbox"
+
+                  v-model="option.value_key"
+                  type="checkbox"
+                  checked
                     @click="
-                      sortingdatabyfilter($event, option.value, option.code)
+                      sortingdatabyfilter(checkbox, option.value, option.code)
                     "
                   />
+                  <span class="checkmark" :class="[ getFilterStatus(option) ? 'checkmarkbg' : ''  ]"></span>
+                    <span class="labels"> {{ option.value }} ({{ option.total }})</span>
+                  </label
+                  >
                 </ul>
               </div>
             </div>
@@ -208,9 +213,9 @@
           <li
             v-if="this.productCount / 20 > 1"
             @click="pagination($event)"
-            v-bind="page"
           >
             {{ Math.ceil(this.productCount / 20) }}
+            <!-- v-bind="page" -->
           </li>
         </ul>
       </div>
@@ -237,7 +242,7 @@ export default {
       productCount: "",
       productName: "",
       selected: "selected",
-      notSelected: "",
+      
       detailsAreVisible: false,
       filterSeen: false,
       showfilter: false,
@@ -256,6 +261,9 @@ export default {
     };
   },
   methods: {
+    getFilterStatus(option){
+      return this.productFilterCetegory.includes(option.code+'-'+option.value)
+    },
     async productInfoData() {
       this.loading = true;
       let data = await axios.get(
@@ -281,17 +289,17 @@ export default {
       this.productName = data.data.result.name;
     },
 
-    sortingdatabyfilter(event, value, code) {
-      console.log("event=", event, "value=", value, "code=", code);
+    sortingdatabyfilter(checked, value, code) {
+      console.log("checked=", checked, "value=", value, "code=", code);
 
       if (
-        !this.productFilterCetegory.includes(`${code}-${value}`) ||
-        !this.checkedValues.includes(`${value}`)
+        !this.productFilterCetegory.includes(`${code}-${value}`  || !this.checkedValues.includes(`${value}`))
       ) {
         this.productFilterCetegory.push(`${code}-${value}`);
         this.checkedValues.push(`${value}`);
-
         this.filtersoptions = this.productFilterCetegory.toString();
+            //   this.checked=true
+            //  this.unchecked=false
       } else {
         let checkingIndex = this.productFilterCetegory.indexOf(
           `${code}-${value}`
@@ -307,28 +315,24 @@ export default {
       this.productInfoData();
     },
 
-    closedFilter(value, index) {
-      console.log("index=", index, "value=", value);
+    closedFilter(index) {
+      console.log("this function is called" ,this.value);
       console.log("AAA", this.checkedValues);
-      if (this.checkedValues.includes(index)) {
-        // let checkedValuesIndex =this.checkedValues.indexOf(index);
-        this.checkedValues.splice(index, 1);
-      }
-
+      this.checkedValues.splice(index, 1);
+      this.productFilterCetegory.splice(index, 1)
       this.productInfoData();
     },
-
+// || !this.shrot_by == ""
     removeFilter() {
-      if (!this.productFilterCetegory.length == 0 || !this.shrot_by == "") {
+
+        // this.$emit('update-cart')
         this.productFilterCetegory = [];
-
         this.shrot_by = "";
-
+        this.checkedValues=[]
+        // this.checked=false
+        // this.unchecked=true
         this.filtersoptions = this.productFilterCetegory.toString();
-        this.productInfoData(this.productFilter);
-
         // this.productFilter = data.data.result.filters;
-      }
       this.productInfoData();
     },
 
@@ -444,22 +448,36 @@ body {
   font-size: 12px;
   margin: 0 10px;
 }
-
+.uncheckmark{
+   width: 12px;
+  height: 12px;
+  border: 1px solid;
+  display: inline-block;
+  border-radius: 0px;
+  background: #fcfcfc
+    url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png)
+    center/1250% no-repeat;
+}
 .checkbox .checkmark {
   width: 12px;
   height: 12px;
   border: 1px solid;
   display: inline-block;
   border-radius: 0px;
-  background: #4c0b36
-    url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png)
-    center/1250% no-repeat;
+  
 }
 
 .checkbox input:checked + .checkmark {
   background-size: 60%;
+
+
 }
 
+.checkmarkbg{
+  background: #4c0b36
+    url(https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/White_check.svg/1200px-White_check.svg.png)
+    center/1250% no-repeat;
+}
 .checkbox input {
   display: none;
 }
